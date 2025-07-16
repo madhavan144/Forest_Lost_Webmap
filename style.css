@@ -1,0 +1,18 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  text-align: center;
+  background-color: #225560;
+  color: white;
+  margin: 0;
+  padding: 10px;
+}
+
+#map {
+  width: 100%;
+  height: 90vh;
+}
