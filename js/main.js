@@ -3,71 +3,85 @@
 // Initialize the map
 const map = L.map('map').setView([7.8731, 80.7718], 7);
 
-// Add tree loss tile layer (no labels)
+// Add Tree Loss & Cover PNG tiles
 L.tileLayer('data/TreeLoss_Treecover/{z}/{x}/{y}.png', {
-  attribution: 'Tree Loss & Tree Cover',
+  attribution: 'Tree Loss & Cover',
   maxZoom: 12,
   minZoom: 6
 }).addTo(map);
 
-// Add district boundary GeoJSON
+// Add district boundaries
+let geoLayer;
 fetch('data/sri_lanka_districts.geojson')
-  .then(response => response.json())
-  .then(geojsonData => {
-    L.geoJSON(geojsonData, {
+  .then(res => res.json())
+  .then(data => {
+    geoLayer = L.geoJSON(data, {
       style: {
-        color: '#00FF00',
-        weight: 1,
+        color: '#004d40',
+        weight: 1.5,
         fillOpacity: 0
+      },
+      onEachFeature: (feature, layer) => {
+        layer.on('click', () => {
+          const district = feature.properties.DISTRICT;
+          document.getElementById('district-name').textContent = `Forest Loss in ${district}`;
+          showChart(district);
+        });
       }
     }).addTo(map);
   });
 
-// Load and visualize forest loss data
+// Load CSV forest loss data
+let forestData = {};
 fetch('data/district_forest_loss_srilanka.csv')
-  .then(response => response.text())
-  .then(csvData => {
-    const rows = csvData.split('\n').slice(1); // Skip header
-    const lossData = rows.map(row => {
-      const [district, year, forestLoss] = row.split(',');
-      return { district, year, forestLoss: parseFloat(forestLoss) };
+  .then(res => res.text())
+  .then(text => {
+    const rows = text.trim().split('\n').slice(1); // skip header
+    rows.forEach(row => {
+      const [district, year, loss] = row.split(',');
+      if (!forestData[district]) forestData[district] = {};
+      forestData[district][year] = parseFloat(loss);
     });
+  });
 
-    // Group by district
-    const grouped = {};
-    lossData.forEach(item => {
-      if (!grouped[item.district]) grouped[item.district] = [];
-      grouped[item.district].push({ year: item.year, forestLoss: item.forestrLoss });
-    });
+let chart; // Chart instance
 
-    // Create chart HTML
-    const chartContainer = document.getElementById('chart');
-    chartContainer.innerHTML = '<h3>Forest Loss by District</h3>';
-    for (const district in grouped) {
-      const canvas = document.createElement('canvas');
-      chartContainer.appendChild(canvas);
+function showChart(district) {
+  if (!forestData[district]) return;
 
-      const years = grouped[district].map(d => d.year);
-      const losses = grouped[district].map(d => d.forestLoss);
+  const years = Object.keys(forestData[district]);
+  const losses = years.map(year => forestData[district][year]);
 
-      new Chart(canvas.getContext('2d'), {
-        type: 'line',
-        data: {
-          labels: years,
-          datasets: [{
-            label: district,
-            data: losses,
-            fill: false,
-            borderColor: 'red',
-            tension: 0.1
-          }]
+  const ctx = document.getElementById('forestChart').getContext('2d');
+
+  if (chart) chart.destroy(); // destroy previous chart if exists
+
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: years,
+      datasets: [{
+        label: `Forest Loss (ha)`,
+        data: losses,
+        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+        borderColor: '#c62828',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Hectares' }
         },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: true }
-          }
+        x: {
+          title: { display: true, text: 'Year' }
         }
-      });
+      }
     }
   });
+}
