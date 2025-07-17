@@ -1,136 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Forest Loss in Sri Lanka</title>
 
-  <!-- Leaflet CSS & JS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-  />
+  <!-- Fonts & Libraries -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-  <!-- D3.js -->
-  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- Custom Styling -->
   <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
     #map {
       width: 70%;
-      height: 600px;
+      height: 100vh;
       float: left;
     }
     #chart {
-      width: 28%;
+      width: 30%;
+      height: 100vh;
       float: right;
       padding: 10px;
       background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
     }
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: #f4f4f4;
-    }
-    h2 {
-      text-align: center;
+    canvas {
+      width: 100% !important;
+      height: auto !important;
     }
   </style>
 </head>
+
 <body>
+  <!-- Map and Chart Containers -->
   <div id="map"></div>
   <div id="chart">
-    <h2>District-wise Forest Loss</h2>
-    <svg width="300" height="500"></svg>
+    <h2>Forest Loss by District</h2>
+    <canvas id="forestLossChart"></canvas>
   </div>
 
-  <script>
-    // Initialize map
-    const map = L.map("map").setView([7.8731, 80.7718], 7);
-
-    // Add custom tile layer
-    L.tileLayer("data/TreeLoss_Treecover/{z}/{x}/{y}.png", {
-      attribution: "Custom Tiles",
-      maxZoom: 12,
-    }).addTo(map);
-
-    // Load GeoJSON for districts
-    fetch("data/sri_lanka_districts.geojson")
-      .then((res) => res.json())
-      .then((geojsonData) => {
-        const geojsonLayer = L.geoJSON(geojsonData, {
-          style: {
-            color: "#fff",
-            weight: 1,
-            fillOpacity: 0,
-          },
-          onEachFeature: (feature, layer) => {
-            layer.on("click", () => {
-              highlightDistrict(feature.properties.DISTRICT);
-            });
-          },
-        }).addTo(map);
-      });
-
-    // Load CSV data and draw chart
-    d3.csv("data/district_forest_loss_srilanka.csv").then((data) => {
-      data.forEach((d) => {
-        d.loss = +d.loss;
-      });
-      drawBarChart(data);
-    });
-
-    function drawBarChart(data) {
-      const svg = d3.select("svg");
-      const margin = { top: 20, right: 20, bottom: 50, left: 60 };
-      const width = +svg.attr("width") - margin.left - margin.right;
-      const height = +svg.attr("height") - margin.top - margin.bottom;
-      const chart = svg
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
-
-      const x = d3
-        .scaleBand()
-        .domain(data.map((d) => d.district))
-        .range([0, width])
-        .padding(0.2);
-
-      const y = d3.scaleLinear().domain([0, d3.max(data, (d) => d.loss)]).range([height, 0]);
-
-      chart
-        .append("g")
-        .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x))
-        .selectAll("text")
-        .attr("transform", "rotate(-45)")
-        .style("text-anchor", "end");
-
-      chart.append("g").call(d3.axisLeft(y));
-
-      chart
-        .selectAll("rect")
-        .data(data)
-        .enter()
-        .append("rect")
-        .attr("x", (d) => x(d.district))
-        .attr("y", (d) => y(d.loss))
-        .attr("width", x.bandwidth())
-        .attr("height", (d) => height - y(d.loss))
-        .attr("fill", "#2e8b57")
-        .attr("class", "bar");
-    }
-
-    function highlightDistrict(districtName) {
-      d3.csv("data/district_forest_loss_srilanka.csv").then((data) => {
-        data.forEach((d) => {
-          d.loss = +d.loss;
-        });
-        const filtered = data.filter((d) => d.district === districtName);
-        drawBarChart(filtered);
-      });
-    }
-  </script>
+  <!-- Main JS -->
+  <script src="js/main.js"></script>
 </body>
 </html>
