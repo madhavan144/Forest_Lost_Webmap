@@ -2,118 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Forest Loss – Sri Lanka</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forest Loss in Sri Lanka</title>
 
-  <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Fonts & Libraries -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Style -->
   <style>
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: #f1f3f6;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
     }
 
     header {
-      background: linear-gradient(90deg, #00695c, #26a69a);
+      background: linear-gradient(to right, #00695c, #26a69a);
       color: white;
       padding: 1rem 2rem;
-      font-size: 1.8rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      text-align: center;
     }
 
-    .container {
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin: 0.3rem 0 0;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    main {
       display: flex;
-      flex: 1;
-      overflow: hidden;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    #chart-form-container {
+      width: 38%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #chart-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    #chart-box h2 {
+      color: #004d40;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 350px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
     }
 
     #map {
-      flex: 3;
-      height: 100%;
-      z-index: 0;
-    }
-
-    #panel {
-      flex: 1.8;
-      background: white;
-      padding: 1.5rem;
-      overflow-y: auto;
-      box-shadow: -4px 0 10px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 1.2rem;
-    }
-
-    #panel h2 {
-      color: #004d40;
-      margin-bottom: 0.4rem;
-      font-size: 1.4rem;
-    }
-
-    #panel p {
-      color: #444;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    canvas {
-      width: 100% !important;
-      max-height: 350px;
+      width: 60%;
+      height: 600px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
     }
 
     footer {
       text-align: center;
-      padding: 0.5rem;
-      font-size: 0.8rem;
-      color: #aaa;
-      background: #fafafa;
-      border-top: 1px solid #eee;
+      padding: 1rem;
+      font-size: 0.9rem;
+      background: #f0f0f0;
+      margin-top: 20px;
     }
 
-    @media (max-width: 768px) {
-      .container {
+    @media (max-width: 960px) {
+      main {
         flex-direction: column;
       }
-      #panel {
-        border-top: 1px solid #ccc;
-        box-shadow: none;
+      #map, #chart-form-container {
+        width: 100%;
+      }
+      iframe {
+        height: 400px;
       }
     }
   </style>
 </head>
 <body>
-  <header> Forest Loss Web Map – Sri Lanka
+
+  <header>
+    <h1>Forest Loss in Sri Lanka (2001–2023)</h1>
+    <p>Interactive Map & Public Reporting Tool</p>
   </header>
 
-  <div class="container">
-    <div id="map"></div>
-    <div id="panel">
-      <h2>Forest Loss by District</h2>
-      <p>
-        This map visualizes forest loss in Sri Lanka. Click a district to see annual forest loss from 2001 to 2023.
-      </p>
-      <canvas id="lossChart"></canvas>
+  <main>
+    <div id="chart-form-container">
+
+      <div id="chart-box">
+        <h2 id="district-name">Select a District to View Forest Loss</h2>
+        <canvas id="forestChart"></canvas>
+      </div>
+
+      <div>
+        <h2>Submit Your Local Observation</h2>
+        <p>Please help us improve forest protection efforts by reporting on-the-ground activities or conditions.</p>
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdc6T4gmsntB7ijvL3HtLtmL0y5fXKbxHh6yRRmrH42zZCpFg/viewform?embedded=true">Loading…</iframe>
+      </div>
+
     </div>
-  </div>
+
+    <div id="map"></div>
+  </main>
 
   <footer>
-    &copy; 2025 University of Moratuwa | GIS & RS - Assignment
+    &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects, University of Moratuwa
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/main.js"></script>
+
 </body>
 </html>
