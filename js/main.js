@@ -1,88 +1,110 @@
-// 1. Initialize the Leaflet map
-const map = L.map('map').setView([7.8731, 80.7718], 7); // Center of Sri Lanka
+// Initialize map
+const map = L.map('map').setView([7.8731, 80.7718], 7);
 
-// 2. Add OpenStreetMap base layer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OSM contributors'
+// Add clean dark basemap (no labels)
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
+  subdomains: 'abcd',
+  maxZoom: 19
 }).addTo(map);
 
-// 3. Add raster tile layer (forest loss visualization)
-const rasterLayer = L.tileLayer('./tiles/{z}/{x}/{y}.png', {
+// 1️⃣ Add raster tile layer (from uploaded TIF as tiles)
+const rasterLayer = L.tileLayer('tiles/{z}/{x}/{y}.png', {
+  attribution: 'Forest Loss Raster',
   tms: false,
-  opacity: 0.7
+  maxZoom: 12
 }).addTo(map);
 
-// 4. Prepare a color scale for forest loss
-function getColor(loss) {
-  return loss > 3000 ? '#800026' :
-         loss > 2000 ? '#BD0026' :
-         loss > 1000 ? '#E31A1C' :
-         loss > 500  ? '#FC4E2A' :
-         loss > 100  ? '#FD8D3C' :
-         loss > 50   ? '#FEB24C' :
-         loss > 0    ? '#FED976' :
-                       '#FFEDA0';
-}
+// 2️⃣ Load CSV: forest loss data
+let forestLossData = {};
+d3.csv("data/forest_loss.csv").then(data => {
+  data.forEach(row => {
+    forestLossData[row.District.trim().toLowerCase()] = row; // use lowercase for matching
+  });
+});
 
-// 5. Load CSV and GeoJSON data
-Promise.all([
-  d3.csv("data/district_forest_loss_srilanka.csv"),
-  fetch("data/sri_lanka_districts.geojson").then(res => res.json())
-]).then(([csvData, geoData]) => {
-  // Convert CSV to a dictionary for easy lookup
-  const lossDict = {};
-  csvData.forEach(row => {
-    lossDict[row.District.toLowerCase()] = +row.Forest_Loss;
+// 3️⃣ Load GeoJSON: district boundaries
+fetch("data/sri_lanka_districts.geojson")
+  .then(res => res.json())
+  .then(geojsonData => {
+    L.geoJSON(geojsonData, {
+      style: feature => ({
+        color: "#00ffff",
+        weight: 1,
+        fillColor: "#004466",
+        fillOpacity: 0.5
+      }),
+      onEachFeature: (feature, layer) => {
+        const districtName = feature.properties.DISTRICT.trim().toLowerCase();
+        const stats = forestLossData[districtName];
+
+        if (stats) {
+          layer.bindPopup(`<strong>${feature.properties.DISTRICT}</strong><br>Loss: ${stats.Loss_ha} ha`);
+        } else {
+          layer.bindPopup(`<strong>${feature.properties.DISTRICT}</strong><br>No data`);
+        }
+
+        layer.on('click', () => {
+          showChart(feature.properties.DISTRICT, stats);
+        });
+      }
+    }).addTo(map);
   });
 
-  // 6. Style function for district coloring
-  function style(feature) {
-    const districtName = feature.properties.DISTRICT.toLowerCase();
-    const loss = lossDict[districtName] || 0;
-    return {
-      fillColor: getColor(loss),
-      weight: 1,
-      opacity: 1,
-      color: 'white',
-      fillOpacity: 0.7
-    };
+// 4️⃣ Chart display using D3
+function showChart(district, data) {
+  const chartDiv = document.getElementById("chart");
+  chartDiv.innerHTML = `<h4>${district}</h4>`;
+
+  if (!data) {
+    chartDiv.innerHTML += `<p>No data available</p>`;
+    return;
   }
 
-  // 7. Add GeoJSON to map with interaction
-  L.geoJSON(geoData, {
-    style: style,
-    onEachFeature: (feature, layer) => {
-      const name = feature.properties.DISTRICT;
-      const loss = lossDict[name.toLowerCase()] || 0;
-      layer.on('click', () => showChart(name, loss));
-      layer.bindTooltip(`${name}<br>Forest Loss: ${loss} ha`);
-    }
-  }).addTo(map);
-});
+  // Clear previous chart
+  d3.select("#chart").select("svg").remove();
 
-// 8. Chart configuration using Chart.js
-const ctx = document.getElementById('lossChart').getContext('2d');
-const chart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ['Forest Loss (ha)'],
-    datasets: [{
-      label: 'Forest Loss',
-      data: [0],
-      backgroundColor: '#E31A1C'
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      y: { beginAtZero: true }
-    }
-  }
-});
+  // Sample bar chart: adjust based on your CSV columns
+  const margin = { top: 20, right: 30, bottom: 40, left: 60 };
+  const width = 300 - margin.left - margin.right;
+  const height = 200 - margin.top - margin.bottom;
 
-// 9. Show chart when district is clicked
-function showChart(district, loss) {
-  chart.data.labels = [district];
-  chart.data.datasets[0].data = [loss];
-  chart.update();
+  const svg = d3.select("#chart")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  const values = [
+    { label: "Forest Loss (ha)", value: +data.Loss_ha },
+    { label: "Remaining Forest", value: +data.Remaining_ha || 0 } // optional column
+  ];
+
+  const x = d3.scaleBand()
+    .domain(values.map(d => d.label))
+    .range([0, width])
+    .padding(0.3);
+
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(values, d => d.value)])
+    .nice()
+    .range([height, 0]);
+
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  svg.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x));
+
+  svg.selectAll("rect")
+    .data(values)
+    .enter()
+    .append("rect")
+    .attr("x", d => x(d.label))
+    .attr("y", d => y(d.value))
+    .attr("width", x.bandwidth())
+    .attr("height", d => height - y(d.value))
+    .attr("fill", "#00ff88");
 }
