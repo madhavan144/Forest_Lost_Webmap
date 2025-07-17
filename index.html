@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Forest Loss in Puttalam & Mannar</title>
+  <title> Forest Loss in Sri Lanka</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Leaflet CSS -->
@@ -15,7 +15,7 @@
 </head>
 <body>
 
-  <h2 style="text-align:center;">🌳 Forest Loss in Dry Zone Forests – Puttalam & Mannar</h2>
+  <h2 style="text-align:center;"> Forest Loss in Districts- SriLanka </h2>
   <div id="map"></div>
   <div id="chart-container">
     <canvas id="lossChart"></canvas>
@@ -59,7 +59,7 @@
       });
 
     // Load CSV forest loss data
-    fetch('data/forest_loss.csv')
+    fetch('data/district_forest_loss_Srilanka.csv')
       .then(res => res.text())
       .then(csvText => {
         const parsed = Papa.parse(csvText, { header: true });
