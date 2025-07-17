@@ -1,64 +1,88 @@
-// Setup the map
-const map = L.map('map').setView([7.8, 80.5], 7);
+// 1. Initialize the Leaflet map
+const map = L.map('map').setView([7.8731, 80.7718], 7); // Center of Sri Lanka
 
+// 2. Add OpenStreetMap base layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
+  attribution: '&copy; OSM contributors'
 }).addTo(map);
 
-// Sample Puttalam & Mannar-like district boundaries
-fetch('https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson')
-  .then(res => res.json())
-  .then(data => {
-    // This is just global data – replace this with your own district-level GeoJSON for Sri Lanka if available
-    L.geoJSON(data, {
-      onEachFeature: function (feature, layer) {
-        layer.on('click', function () {
-          showChart(feature.properties.NAME || 'District', feature.properties);
-        });
-      },
-      style: {
-        color: '#2ecc71',
-        weight: 2
-      }
-    }).addTo(map);
+// 3. Add raster tile layer (forest loss visualization)
+const rasterLayer = L.tileLayer('./tiles/{z}/{x}/{y}.png', {
+  tms: false,
+  opacity: 0.7
+}).addTo(map);
+
+// 4. Prepare a color scale for forest loss
+function getColor(loss) {
+  return loss > 3000 ? '#800026' :
+         loss > 2000 ? '#BD0026' :
+         loss > 1000 ? '#E31A1C' :
+         loss > 500  ? '#FC4E2A' :
+         loss > 100  ? '#FD8D3C' :
+         loss > 50   ? '#FEB24C' :
+         loss > 0    ? '#FED976' :
+                       '#FFEDA0';
+}
+
+// 5. Load CSV and GeoJSON data
+Promise.all([
+  d3.csv("data/forest_loss.csv"),
+  fetch("data/sri_lanka_districts.geojson").then(res => res.json())
+]).then(([csvData, geoData]) => {
+  // Convert CSV to a dictionary for easy lookup
+  const lossDict = {};
+  csvData.forEach(row => {
+    lossDict[row.District.toLowerCase()] = +row.Forest_Loss;
   });
 
-// Dummy chart data – Replace with your real CSV/JSON values
-const forestLossData = {
-  "Puttalam": [500, 600, 800, 750, 400, 300, 200, 100],
-  "Mannar": [200, 300, 250, 220, 180, 100, 50, 20],
-};
+  // 6. Style function for district coloring
+  function style(feature) {
+    const districtName = feature.properties.DISTRICT.toLowerCase();
+    const loss = lossDict[districtName] || 0;
+    return {
+      fillColor: getColor(loss),
+      weight: 1,
+      opacity: 1,
+      color: 'white',
+      fillOpacity: 0.7
+    };
+  }
 
-const labels = ["2001", "2005", "2010", "2013", "2015", "2017", "2020", "2023"];
-
-const ctx = document.getElementById('lossChart').getContext('2d');
-let chart;
-
-function showChart(district, data) {
-  const values = forestLossData[district] || [0, 0, 0, 0, 0, 0, 0, 0];
-  if (chart) chart.destroy();
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: `Forest Loss in ${district}`,
-        data: values,
-        backgroundColor: '#e74c3c'
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top'
-        },
-        title: {
-          display: true,
-          text: `Forest Loss Trend in ${district}`
-        }
-      }
+  // 7. Add GeoJSON to map with interaction
+  L.geoJSON(geoData, {
+    style: style,
+    onEachFeature: (feature, layer) => {
+      const name = feature.properties.DISTRICT;
+      const loss = lossDict[name.toLowerCase()] || 0;
+      layer.on('click', () => showChart(name, loss));
+      layer.bindTooltip(`${name}<br>Forest Loss: ${loss} ha`);
     }
-  });
+  }).addTo(map);
+});
+
+// 8. Chart configuration using Chart.js
+const ctx = document.getElementById('lossChart').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Forest Loss (ha)'],
+    datasets: [{
+      label: 'Forest Loss',
+      data: [0],
+      backgroundColor: '#E31A1C'
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+// 9. Show chart when district is clicked
+function showChart(district, loss) {
+  chart.data.labels = [district];
+  chart.data.datasets[0].data = [loss];
+  chart.update();
 }
