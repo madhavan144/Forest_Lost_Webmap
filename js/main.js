@@ -26,7 +26,7 @@ function getColor(loss) {
 
 // 5. Load CSV and GeoJSON data
 Promise.all([
-  d3.csv("data/forest_loss.csv"),
+  d3.csv("data/district_forest_loss_srilanka.csv"),
   fetch("data/sri_lanka_districts.geojson").then(res => res.json())
 ]).then(([csvData, geoData]) => {
   // Convert CSV to a dictionary for easy lookup
