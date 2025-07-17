@@ -1,29 +1,32 @@
-// Initialize map
+// Initialize map centered on Sri Lanka
 const map = L.map('map').setView([7.8731, 80.7718], 7);
 
-// Add clean dark basemap (no labels)
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+// Add clean dark basemap without labels
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
   subdomains: 'abcd',
   maxZoom: 19
 }).addTo(map);
 
-// 1️⃣ Add raster tile layer (from uploaded TIF as tiles)
+// Add raster tile layer (from your uploaded tiles)
 const rasterLayer = L.tileLayer('tiles/{z}/{x}/{y}.png', {
   attribution: 'Forest Loss Raster',
   tms: false,
   maxZoom: 12
 }).addTo(map);
 
-// 2️⃣ Load CSV: forest loss data
+// Object to hold forest loss data from CSV
 let forestLossData = {};
+
+// Load CSV data with d3
 d3.csv("data/forest_loss.csv").then(data => {
   data.forEach(row => {
-    forestLossData[row.District.trim().toLowerCase()] = row; // use lowercase for matching
+    // Store data keyed by lowercase district name for matching
+    forestLossData[row.District.trim().toLowerCase()] = row;
   });
 });
 
-// 3️⃣ Load GeoJSON: district boundaries
+// Load GeoJSON district boundaries and add to map
 fetch("data/sri_lanka_districts.geojson")
   .then(res => res.json())
   .then(geojsonData => {
@@ -44,6 +47,7 @@ fetch("data/sri_lanka_districts.geojson")
           layer.bindPopup(`<strong>${feature.properties.DISTRICT}</strong><br>No data`);
         }
 
+        // On click, show chart for that district
         layer.on('click', () => {
           showChart(feature.properties.DISTRICT, stats);
         });
@@ -51,7 +55,7 @@ fetch("data/sri_lanka_districts.geojson")
     }).addTo(map);
   });
 
-// 4️⃣ Chart display using D3
+// Function to show bar chart of forest loss data for a district using D3
 function showChart(district, data) {
   const chartDiv = document.getElementById("chart");
   chartDiv.innerHTML = `<h4>${district}</h4>`;
@@ -61,14 +65,15 @@ function showChart(district, data) {
     return;
   }
 
-  // Clear previous chart
+  // Remove any previous SVG
   d3.select("#chart").select("svg").remove();
 
-  // Sample bar chart: adjust based on your CSV columns
+  // Chart margins and size
   const margin = { top: 20, right: 30, bottom: 40, left: 60 };
   const width = 300 - margin.left - margin.right;
   const height = 200 - margin.top - margin.bottom;
 
+  // Create SVG container
   const svg = d3.select("#chart")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -76,28 +81,34 @@ function showChart(district, data) {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
+  // Data for bars
   const values = [
     { label: "Forest Loss (ha)", value: +data.Loss_ha },
-    { label: "Remaining Forest", value: +data.Remaining_ha || 0 } // optional column
+    { label: "Remaining Forest", value: +data.Remaining_ha || 0 }
   ];
 
+  // X scale - categorical
   const x = d3.scaleBand()
     .domain(values.map(d => d.label))
     .range([0, width])
     .padding(0.3);
 
+  // Y scale - linear
   const y = d3.scaleLinear()
     .domain([0, d3.max(values, d => d.value)])
     .nice()
     .range([height, 0]);
 
+  // Y axis
   svg.append("g")
     .call(d3.axisLeft(y));
 
+  // X axis
   svg.append("g")
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(x));
 
+  // Bars
   svg.selectAll("rect")
     .data(values)
     .enter()
