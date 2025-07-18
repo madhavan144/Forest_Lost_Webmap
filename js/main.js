@@ -1,4 +1,4 @@
-  // Initialize the map
+// Initialize the map
 const map = L.map('map').setView([7.8731, 80.7718], 7);
 
 // Dark basemap
@@ -63,10 +63,8 @@ function loadChart(districtName) {
   d3.csv('data/district_forest_loss_srilanka.csv').then(data => {
     const filtered = data.filter(d => d.shapeName === districtName);
 
- filtered.map(d => d.year),
-[{
-  'Forest Loss (km²)',
- filtered.map(d => +d.loss_km2),
+    const years = filtered.map(d => d.Year);
+    const losses = filtered.map(d => +d.Loss);
 
     // Clear previous chart
     d3.select("#chart").select("svg").remove();
