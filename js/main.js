@@ -1,17 +1,19 @@
 // Initialize the map
-const map = L.map('map').setView([7.8731, 80.7718], 7);
+const map = L.map('map', {
+  zoomControl: true,
+  attributionControl: false
+}).setView([7.8731, 80.7718], 7);
 
-// Dark basemap
-const darkBasemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; CartoDB',
-  subdomains: 'abcd'
+// Dark basemap with NO labels
+const darkNoLabel = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+  maxZoom: 18
 }).addTo(map);
 
 // Color styling
 function getHighlightStyle() {
   return {
     color: '#66c2a5', // light blue border
-    weight: 2,
+    weight: 1.5,       // thinner than before
     fillOpacity: 0.3,
     fillColor: '#66c2a5'
   };
@@ -20,8 +22,8 @@ function getHighlightStyle() {
 function getDefaultStyle() {
   return {
     color: 'white',
-    weight: 1,
-    fillOpacity: 0  // transparent fill
+    weight: 0.5,       // thinner district boundary
+    fillOpacity: 0
   };
 }
 
@@ -44,7 +46,7 @@ fetch('data/sri_lanka_districts.geojson')
             selectedDistrict = e.target;
             selectedDistrict.setStyle(getHighlightStyle());
 
-            const districtName = feature.properties.shapeName; // <- Update if your field is named differently
+            const districtName = feature.properties.shapeName;
             loadChart(districtName);
           }
         });
@@ -58,25 +60,23 @@ fetch('data/sri_lanka_districts.geojson')
 
 // Load CSV and draw chart
 function loadChart(districtName) {
-  d3.select('#chart').html(`<h3>Forest Loss: ${districtName}</h3>`);
+  d3.select('#chart').html(`<h3 style="color:white">Forest Loss: ${districtName}</h3>`);
 
   d3.csv('data/district_forest_loss_srilanka.csv').then(data => {
     const filtered = data.filter(d => d.shapeName === districtName);
-
     const years = filtered.map(d => d.Year);
     const losses = filtered.map(d => +d.Loss);
 
-    // Clear previous chart
     d3.select("#chart").select("svg").remove();
 
     const svg = d3.select("#chart")
       .append("svg")
-      .attr("width", 300)
-      .attr("height", 250);
+      .attr("width", "100%")
+      .attr("height", 300);
 
-    const margin = { top: 20, right: 10, bottom: 30, left: 40 },
-      width = 300 - margin.left - margin.right,
-      height = 250 - margin.top - margin.bottom;
+    const margin = { top: 20, right: 30, bottom: 30, left: 50 },
+          width = 600 - margin.left - margin.right,
+          height = 300 - margin.top - margin.bottom;
 
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -92,10 +92,14 @@ function loadChart(districtName) {
 
     g.append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x).tickSizeOuter(0))
+      .selectAll("text")
+      .style("fill", "white");
 
     g.append("g")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .selectAll("text")
+      .style("fill", "white");
 
     g.selectAll("rect")
       .data(filtered)
