@@ -1,97 +1,4 @@
-// Initialize map
-const map = L.map('map').setView([7.8731, 80.7718], 7);
-
-// Add dark basemap
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
-  subdomains: 'abcd',
-  maxZoom: 19
-}).addTo(map);
-
-// Load data
-Promise.all([
-  d3.json('districts.geojson'),
-  d3.csv('forest_loss.csv', d3.autoType)
-]).then(([geoData, lossData]) => {
-  // Add GeoJSON layer
-  L.geoJSON(geoData, {
-    style: {
-      color: "#ffffff",
-      weight: 1,
-      fillOpacity: 0,
-    },
-    onEachFeature: (feature, layer) => {
-      const districtName = feature.properties.shapeName;
-
-      layer.on({
-        mouseover: function () {
-          this.setStyle({
-            fillOpacity: 0.3,
-            fillColor: "#00ffcc"
-          });
-        },
-        mouseout: function () {
-          this.setStyle({
-            fillOpacity: 0,
-            fillColor: null
-          });
-        },
-        click: function () {
-          showChart(districtName, lossData);
-        }
-      });
-
-      layer.bindTooltip(districtName);
-    }
-  }).addTo(map);
-});
-
-// Chart creation function
-function showChart(districtName, data) {
-  const filtered = data.filter(d => d.shapeName === districtName);
-
-  // If no data found, show message
-  if (filtered.length === 0) {
-    d3.select("#chart").html(`<h3 style="color: white">No data available for ${districtName}</h3>`);
-    return;
-  }
-
-  // Sort by year
-  filtered.sort((a, b) => d3.ascending(a.year, b.year));
-
-  // Clear existing chart
-  d3.select("#chart").html(`<canvas id="lossChart"></canvas>`);
-
-  const ctx = document.getElementById('lossChart').getContext('2d');
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: filtered.map(d => d.year),
-      datasets: [{
-        label: `Forest Loss in ${districtName} (km²)`,
-        data: filtered.map(d => +d.loss_km2),
-        backgroundColor: '#00ffaa'
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: '#ffffff'
-          }
-        }
-      }
-    }
-  });
-}
-// Initialize the map
+  // Initialize the map
 const map = L.map('map').setView([7.8731, 80.7718], 7);
 
 // Dark basemap
@@ -156,8 +63,10 @@ function loadChart(districtName) {
   d3.csv('data/district_forest_loss_srilanka.csv').then(data => {
     const filtered = data.filter(d => d.shapeName === districtName);
 
-    const years = filtered.map(d => d.Year);
-    const losses = filtered.map(d => +d.Loss);
+ filtered.map(d => d.year),
+[{
+  'Forest Loss (km²)',
+ filtered.map(d => +d.loss_km2),
 
     // Clear previous chart
     d3.select("#chart").select("svg").remove();
