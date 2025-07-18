@@ -5,9 +5,10 @@ const map = L.map('map', {
 }).setView([7.8731, 80.7718], 7);
 
 // Dark basemap with NO labels
-const darkNoLabel = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-  maxZoom: 18
+const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd'
 }).addTo(map);
+
 
 // Color styling
 function getHighlightStyle() {
