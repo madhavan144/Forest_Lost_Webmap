@@ -60,6 +60,7 @@ fetch('data/sri_lanka_districts.geojson')
 
 // Load CSV and draw chart
 function loadChart(districtName) {
+  // Corrected: Added backticks (` `) for string interpolation
   d3.select('#chart').html(`<h3 style="color:white">Forest Loss: ${districtName}</h3>`);
 
   d3.csv('data/district_forest_loss_srilanka.csv').then(data => {
