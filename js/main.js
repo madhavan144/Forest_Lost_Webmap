@@ -22,8 +22,8 @@ function getHighlightStyle() {
 
 function getDefaultStyle() {
   return {
-    color: 'white',
-    weight: 0.5,       // thinner district boundary
+    color: '#66c2a5',
+    weight: 0.3,       // thinner district boundary
     fillOpacity: 0
   };
 }
@@ -74,11 +74,11 @@ function loadChart(districtName) {
     const svg = d3.select("#chart")
       .append("svg")
       .attr("width", "100%")
-      .attr("height", 300);
+      .attr("height", 400);
 
     const margin = { top: 20, right: 30, bottom: 30, left: 50 },
           width = 600 - margin.left - margin.right,
-          height = 300 - margin.top - margin.bottom;
+          height = 400 - margin.top - margin.bottom;
 
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
