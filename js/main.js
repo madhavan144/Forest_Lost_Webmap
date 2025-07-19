@@ -8,17 +8,19 @@ const map = L.map('map', {
 const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd'
 }).addTo(map);
-// Add the PNG overlay with geo bounds
-  const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
-  L.imageOverlay('forest_loss.png', imageBounds, {
-    opacity: 0.8
-  }).addTo(map);
+
+// ➕ Forest loss image overlay (from your example)
+const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
+L.imageOverlay('forest_loss.png', imageBounds, {
+  opacity: 0.8
+}).addTo(map);
+
 
 // Color styling
 function getHighlightStyle() {
   return {
     color: '#66c2a5', // light blue border
-    weight: 1.5,       // thinner than before
+    weight: 1.5,
     fillOpacity: 0.3,
     fillColor: '#66c2a5'
   };
@@ -27,7 +29,7 @@ function getHighlightStyle() {
 function getDefaultStyle() {
   return {
     color: '#66c2a5',
-    weight: 0.3,       // thinner district boundary
+    weight: 0.3,
     fillOpacity: 0
   };
 }
@@ -65,7 +67,6 @@ fetch('data/sri_lanka_districts.geojson')
 
 // Load CSV and draw chart
 function loadChart(districtName) {
-  // Corrected: Added backticks (` `) for string interpolation
   d3.select('#chart').html(`<h3 style="color:white">Forest Loss: ${districtName}</h3>`);
 
   d3.csv('data/district_forest_loss_srilanka.csv').then(data => {
