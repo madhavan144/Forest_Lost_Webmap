@@ -10,23 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-  // Initialize the map on the existing #map div
-  const map = L.map('map', {
-  zoomControl: true,
-  attributionControl: false
-}).setView([7.8731, 80.7718], 7);
 
-// Dark basemap with NO labels
-const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd'
-}).addTo(map);
-
-  // Add PNG overlay (ensure 'forest_loss.png' is in the correct path)
-  L.imageOverlay('forest_loss.png', imageBounds, {
-    opacity: 0.8
-  }).addTo(map);
-</script>
+  
 
   <!-- Style -->
   <style>
