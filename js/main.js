@@ -8,7 +8,11 @@ const map = L.map('map', {
 const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd'
 }).addTo(map);
-
+// Add the PNG overlay with geo bounds
+  const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
+  L.imageOverlay('forest_loss.png', imageBounds, {
+    opacity: 0.8
+  }).addTo(map);
 
 // Color styling
 function getHighlightStyle() {
