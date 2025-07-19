@@ -65,57 +65,27 @@ fetch('data/sri_lanka_districts.geojson')
     loadChart(first.properties.shapeName);
   });
 
-// Load CSV and draw chart
-function loadChart(districtName) {
-  d3.select('#chart').html(`<h3 style="color:white">Forest Loss: ${districtName}</h3>`);
+function onEachFeature(feature, layer) {
+  layer.on({
+    click: function (e) {
+      if (selectedDistrict) {
+        geojsonLayer.resetStyle(selectedDistrict);
+      }
 
-  d3.csv('data/district_forest_loss_srilanka.csv').then(data => {
-    const filtered = data.filter(d => d.shapeName === districtName);
-    const years = filtered.map(d => d.Year);
-    const losses = filtered.map(d => +d.Loss);
+      selectedDistrict = e.target;
+      selectedDistrict.setStyle(getHighlightStyle());
 
-    d3.select("#chart").select("svg").remove();
+      const districtName = feature.properties.shapeName;
 
-    const svg = d3.select("#chart")
-      .append("svg")
-      .attr("width", "100%")
-      .attr("height", 400);
+      // Load the chart image instead of drawing it
+      const chartImg = document.getElementById('chart-image');
+      const imagePath = `charts/${districtName}.jpg`;
+      chartImg.src = imagePath;
+      chartImg.alt = `Forest Loss Chart for ${districtName}`;
+      chartImg.style.display = 'block';
 
-    const margin = { top: 20, right: 30, bottom: 30, left: 50 },
-          width = 600 - margin.left - margin.right,
-          height = 400 - margin.top - margin.bottom;
-
-    const g = svg.append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    const x = d3.scaleBand()
-      .domain(years)
-      .range([0, width])
-      .padding(0.1);
-
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(losses) || 1000])
-      .range([height, 0]);
-
-    g.append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x).tickSizeOuter(0))
-      .selectAll("text")
-      .style("fill", "white");
-
-    g.append("g")
-      .call(d3.axisLeft(y))
-      .selectAll("text")
-      .style("fill", "white");
-
-    g.selectAll("rect")
-      .data(filtered)
-      .enter()
-      .append("rect")
-      .attr("x", d => x(d.Year))
-      .attr("y", d => y(+d.Loss))
-      .attr("width", x.bandwidth())
-      .attr("height", d => height - y(+d.Loss))
-      .attr("fill", "steelblue");
+      // Update chart title if needed
+      document.querySelector('#chart-box h3').innerText = `Forest Loss: ${districtName}`;
+    }
   });
 }
