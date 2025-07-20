@@ -150,44 +150,33 @@
 
 
 
-<!-- Reporting Box (bottom-left) -->
-<!-- Toggle Button -->
-<button id="toggleReportBtn" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
-  📋 Report Deforestation
-</button>
-
-<!-- Report Box (Initially Hidden) -->
-<div id="reportBox" style="
-  position: fixed;
-  bottom: 60px;
-  left: 20px;
-  width: 300px;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  z-index: 1000;
-  display: none;
-">
-  <h4 style="margin-top: 0;">📄 Submit Report</h4>
-  <label>Location:</label>
-  <input type="text" id="reportLocation" style="width: 100%;" placeholder="District or Coordinates"><br><br>
-
-  <label>Short Description:</label>
-  <input type="text" id="reportShort" style="width: 100%;" placeholder="E.g. Tree cutting"><br><br>
-
-  <label>Details:</label>
-  <textarea id="reportDetails" style="width: 100%;" rows="3" placeholder="More details..."></textarea><br><br>
-
-  <label>Upload Image/Video:</label>
-  <input type="file" id="reportFile"><br><br>
-
-  <label>Your Name (optional):</label>
-  <input type="text" id="reportName" style="width: 100%;"><br><br>
-
-  <button onclick="submitReport()">Submit Report</button>
+<!-- Report Button -->
+<div id="report-toggle-button" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
+  <button onclick="toggleReportBox()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    Clik here to Comment...!
+  </button>
 </div>
 
+<!-- Hidden Report Box -->
+<div id="report-box" style="display: none; position: fixed; bottom: 60px; left: 20px; z-index: 1000; background-color: white; padding: 10px; border-radius: 10px; width: 260px; box-shadow: 0 0 12px rgba(0,0,0,0.4);">
+  <h4 style="margin-top: 0;">Deforestation Report</h4>
+  <label>Location:</label><br>
+  <input type="text" id="location" style="width: 100%;"><br><br>
+
+  <label>Short Description:</label><br>
+  <input type="text" id="shortDesc" style="width: 100%;"><br><br>
+
+  <label>Details:</label><br>
+  <textarea id="details" rows="3" style="width: 100%;"></textarea><br><br>
+
+  <label>Upload Image/Video:</label><br>
+  <input type="file" id="mediaUpload"><br><br>
+
+  <label>Your Additional Comments (optional):</label><br>
+  <input type="text" id="name" style="width: 100%;"><br><br>
+
+  <button onclick="submitReportForm()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
+</div>
 
    
     <div id="map"></div>
