@@ -15,18 +15,7 @@ L.imageOverlay('forest_loss.png', imageBounds, {
   opacity: 0.8
 }).addTo(map);
 
-// Create a custom legend control
-const legend = L.control({ position: 'bottomright' });
 
-legend.onAdd = function (map) {
-  const div = L.DomUtil.create('div', 'info legend');
-  div.innerHTML += '<h4>Forest Loss</h4>';
-  div.innerHTML += '<p>Data from 2001 to 2023</p>';
-  div.innerHTML += '<img src="forest_loss.png" alt="Forest Loss Legend" style="width:150px;">';
-  return div;
-};
-
-legend.addTo(map);
 
 
 // Styling
