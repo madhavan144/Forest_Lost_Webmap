@@ -85,7 +85,7 @@ function onEachFeature(feature, layer) {
       chartImg.style.display = 'block';
 
       // Update chart title if needed
-      document.querySelector('#chart-box h3').innerText = `Forest Loss: ${districtName}`;
+      document.querySelector('#chart-box h2').innerText = `Forest Loss: ${districtName}`;
     }
   });
 }
