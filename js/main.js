@@ -115,7 +115,7 @@ function submitForm() {
     return;
   }
 
-  fetch("https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
     method: "POST",
     body: JSON.stringify({
       place: location,
@@ -137,6 +137,12 @@ function submitForm() {
     document.getElementById("mediaUrl").value = "";
     document.getElementById("name").value = "";
   });
+
+  document.getElementById('toggleReportBtn').addEventListener('click', function () {
+  const box = document.getElementById('reportBox');
+  box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
+});
+
 }
 
 
