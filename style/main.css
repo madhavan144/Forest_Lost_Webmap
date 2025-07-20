@@ -67,5 +67,22 @@ body, html {
   border-radius: 5px;
 }
 
+#reportBox {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  width: 250px;
+  font-family: sans-serif;
+}
+
+#reportBox input, #reportBox select, #reportBox textarea {
+  width: 100%;
+  margin-bottom: 6px;
+}
 
 
