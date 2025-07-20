@@ -144,6 +144,19 @@ function submitForm() {
 });
 
 }
+function toggleReportBox() {
+  const box = document.getElementById("report-box");
+  if (box.style.display === "none" || box.style.display === "") {
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+}
+
+function submitReportForm() {
+  // You can handle form submission here (to Google Sheets or wherever)
+  alert("Thank you for submitting the report!");
+}
 
 
 
