@@ -154,6 +154,28 @@
   
 </div>
 
+<!-- Report Form Container -->
+<div id="reportForm">
+  <h3> Public Comments </h3>
+  <form id="issueForm">
+    <label>Location:</label>
+    <input type="text" id="locationInput" readonly />
+
+    <label>Short Description:</label>
+    <input type="text" id="shortDesc" placeholder="e.g. Tree cutting" required />
+
+    <label>Details:</label>
+    <textarea id="details" placeholder="More details..." required></textarea>
+
+    <label>Upload Image/Video:</label>
+    <input type="file" id="mediaUpload" accept="image/*,video/*" />
+
+    <label>Your Name (optional):</label>
+    <input type="text" id="username" placeholder="Name" />
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
 
    
     <div id="map"></div>
