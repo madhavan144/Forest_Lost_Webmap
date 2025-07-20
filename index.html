@@ -94,6 +94,15 @@
      margin-bottom: 10px;
     }
 
+       #chart-box h3{
+      background: White;
+      position: absolute;
+      padding: 50px;
+      border-radius: 15px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+     margin-bottom: 10px;
+    }
+
   
 
    
@@ -155,34 +164,33 @@
 </div>
 
 <!-- Report Form Container -->
-<div id="reportForm">
-  <h3> Public Comments </h3>
-  <form id="issueForm">
-    <label>Location:</label>
-    <input type="text" id="locationInput" readonly />
+<div id="reportBox">
+  <h3>Comment & Report</h3>
+  <label>Location:</label>
+  <input type="text" id="location" placeholder="Enter area name" />
 
-    <label>Short Description:</label>
-    <input type="text" id="shortDesc" placeholder="e.g. Tree cutting" required />
+  <label>Short Description:</label>
+  <input type="text" id="shortDesc" placeholder="E.g. Tree cutting" />
 
-    <label>Details:</label>
-    <textarea id="details" placeholder="More details..." required></textarea>
+  <label>Details:</label>
+  <textarea id="details" placeholder="More details..."></textarea>
 
-    <label>Upload Image/Video:</label>
-    <input type="file" id="mediaUpload" accept="image/*,video/*" />
+  <label>Upload Image/Video:</label>
+  <input type="file" id="fileUpload" />
 
-    <label>Your Name (optional):</label>
-    <input type="text" id="username" placeholder="Name" />
+  <label>Your Name (optional):</label>
+  <input type="text" id="username" />
 
-    <button type="submit">Submit</button>
-  </form>
+  <button onclick="submitReport()">Submit</button>
 </div>
+
 
    
     <div id="map"></div>
   </main>
 
   <footer>
-    &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects, University of Moratuwa
+    &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects l University of Moratuwa
   </footer>
 
   <script src="js/main.js"></script>
