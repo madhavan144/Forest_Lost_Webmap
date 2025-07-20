@@ -95,13 +95,13 @@ searchControl.on('markgeocode', function(e) {
   const latlng = e.geocode.center;
   const name = e.geocode.name;
 
-  if (searchedMarker) map.removeLayer(searchedMarker);
+  if (searchedMarker) {map.removeLayer(searchedMarker);
+                      }
   searchedMarker = L.marker(latlng).addTo(map)
     .bindPopup(name).openPopup();
 
-  document.getElementById('locationInput').value = name + " (" + latlng.lat.toFixed(5) + ", " + latlng.lng.toFixed(5) + ")";
-});
-
+   document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
+  });
 // Submit to Google Sheets Web App
 function submitForm() {
   const location = document.getElementById("locationInput").value;
