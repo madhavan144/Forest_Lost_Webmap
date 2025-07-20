@@ -181,6 +181,31 @@
   <button onclick="submitReport()">Submit</button>
 </div>
 
+ <div id="reportBox">
+  <h4>Report Deforestation</h4>
+  <label>Location:</label>
+  <input id="reportLocation" placeholder="Click map to select" disabled><br>
+  
+  <label>Issue Type:</label>
+  <select id="reportType">
+    <option>Tree Cutting</option>
+    <option>Fire</option>
+    <option>Illegal Logging</option>
+    <option>Other</option>
+  </select><br>
+
+  <label>Short Description:</label>
+  <input id="reportShort" placeholder="e.g. Sudden clearing"><br>
+
+  <label>Details:</label>
+  <textarea id="reportDetails" rows="2" placeholder="More details..."></textarea><br>
+
+  <label>Your Name (optional):</label>
+  <input id="reportName"><br>
+
+  <button onclick="submitReport()">Submit</button>
+</div>
+
 
    
     <div id="map"></div>
