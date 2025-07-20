@@ -26,23 +26,7 @@ body, html {
   padding: 10px;
   max-width: 400px;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  border-radius: 10px;
-}
-<style>
-  .legend {
-    position: absolute;
-    bottom: 30px;
-    left: 30px;
-    background: #97969c;
-    color: black;
-    padding: 10px;
-    font-size: 12px;
-    line-height: 18px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    z-index: 1000;
-  }
-</style>
+  border-radius: 10px;}
 
 
 
@@ -52,13 +36,5 @@ body, html {
 }
 
 
-<div id="legend" class="legend">
-  <b>Forest Loss (2001–2023)</b><br>
-  <i style="background:#440154;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 0–50 km²<br>
-  <i style="background:#31688e;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 51–100 km²<br>
-  <i style="background:#35b779;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 101–150 km²<br>
-  <i style="background:#fde725;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 151–200 km²<br>
-  <i style="background:#ffea46;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 201+ km²
-</div>
 
 
