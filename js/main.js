@@ -52,26 +52,33 @@ fetch('data/sri_lanka_districts.geojson')
             selectedDistrict = e.target;
             selectedDistrict.setStyle(getHighlightStyle());
 
-            const districtName = feature.properties.shapeName;
-            showChartImage(districtName);
-          }
+            conEachFeature: (feature, layer) => {
+        layer.on("click", () => {
+          const districtName = feature.properties.shapeName;
+          showChart(districtName);
+          layer.setStyle({ fillColor: "#ff7800", fillOpacity: 0.6 });
         });
-      }
-    }).addTo(map);
 
-    // Auto-select first district
-    const first = geoData.features[0];
-    const firstName = first.properties.shapeName;
-    showChartImage(firstName);
+        layer.on("mouseover", () => {
+          layer.setStyle({ weight: 3 });
+        });
+
+        layer.on("mouseout", () => {
+          layer.setStyle({ weight: 1 });
+        });
+      },
+    }).addTo(map);
   });
 
-// Function to show chart image by district name
-function showChartImage(districtName) {
-  const chartImg = document.getElementById('chart-image');
-  const imagePath = `charts/${districtName}.jpg`;
-  chartImg.src = imagePath;
-  chartImg.alt = `Forest Loss Chart for ${districtName}`;
-  chartImg.style.display = 'block';
+// Show chart image
+function showChart(districtName) {
+  const chartContainer = document.getElementById("chart-container");
+  const chartImage = document.getElementById("chart-image");
+  const chartTitle = document.getElementById("chart-title");
 
-  document.querySelector('#chart-box h2').innerText = `Forest Loss: ${districtName}`;
+  const imagePath = `charts/${districtName}.jpg`;
+
+  chartTitle.textContent = `Forest Loss in ${districtName}`;
+  chartImage.src = imagePath;
+  chartContainer.style.display = "block";
 }
