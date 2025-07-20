@@ -83,147 +83,67 @@ function showChartImage(districtName) {
 
   document.querySelector('#chart-box h2').innerText = `Forest Loss: ${districtName}`;
 }
-// Create a layer group to hold public reports
-const reportLayer = L.geoJSON([], {
-  pointToLayer: function (feature, latlng) {
-    return L.circleMarker(latlng, {
-      radius: 6,
-      fillColor: '#ff4d4d',
-      color: '#fff',
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.9
-    });
-  },
-  onEachFeature: function (feature, layer) {
-    layer.bindPopup(`<b>Public Report:</b><br>${feature.properties.comment}`);
-  }
+
+
+
+
+// Search control (requires leaflet-control-geocoder plugin)
+const searchControl = L.Control.geocoder({
+  defaultMarkGeocode: true,
+  placeholder: 'Search for a place...'
 }).addTo(map);
 
-function onDistrictClick(e) {
-  const clickedDistrict = e.target.feature.properties.shapeName;
-onEachFeature: function (feature, layer) {
-  layer.on({
-    click: onDistrictClick
-  });
-}
+// Update location input when search result selected
+let searchedMarker = null;
+searchControl.on('markgeocode', function(e) {
+  const latlng = e.geocode.center;
+  const name = e.geocode.name;
 
-  // Clear previous chart or highlight
-  highlightDistrict(clickedDistrict);
+  if (searchedMarker) map.removeLayer(searchedMarker);
+  searchedMarker = L.marker(latlng).addTo(map)
+    .bindPopup(name).openPopup();
 
-  // Filter reports for that district (assuming you have them loaded in `reportData`)
-  const districtReports = reportData.filter(r => r.district === clickedDistrict);
-
-  // Clear old markers
-  reportLayer.clearLayers();
-
-  // Group by issue type for same-color
-  const issueColors = {
-    "Tree Cutting": "red",
-    "Fire": "orange",
-    "Illegal Logging": "purple",
-    "Other": "blue"
-  };
-
-  districtReports.forEach(report => {
-    const issueType = report.issueType || "Other";
-    const color = issueColors[issueType] || "gray";
-
-    const marker = L.circleMarker([report.lat, report.lng], {
-      radius: 8,
-      color: color,
-      fillOpacity: 0.8
-    }).bindPopup(`
-      <b>${issueType}</b><br>
-      ${report.shortDescription}<br>
-      <i>${report.details}</i>
-    `);
-
-    reportLayer.addLayer(marker);
-  });
-}
-
-map.on('click', function(e) {
-  const lat = e.latlng.lat.toFixed(6);
-  const lng = e.latlng.lng.toFixed(6);
-  document.getElementById('reportLocation').value = `${lat}, ${lng}`;
-  reportLat = lat;
-  reportLng = lng;
+  document.getElementById('locationInput').value = name + " (" + latlng.lat.toFixed(5) + ", " + latlng.lng.toFixed(5) + ")";
 });
 
+// Submit to Google Sheets Web App
+function submitForm() {
+  const location = document.getElementById("locationInput").value;
+  const problem = document.getElementById("problem").value;
+  const more = document.getElementById("moreInfo").value;
+  const media = document.getElementById("mediaUrl").value;
+  const name = document.getElementById("name").value;
 
-
-
-// Handle report submission
-function submitReport(lat, lng) {
-  const comment = document.getElementById("reportText").value.trim();
-  if (!comment) {
-    alert("Please enter a description.");
+  if (!problem || !location) {
+    alert("Please provide at least location and issue.");
     return;
   }
 
-  const reportFeature = {
-    type: "Feature",
-    geometry: {
-      type: "Point",
-      coordinates: [lng, lat]
-    },
-    properties: {
-      comment: comment
+  fetch("https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      place: location,
+      problem: problem,
+      more: more,
+      media: media,
+      name: name
+    }),
+    headers: {
+      "Content-Type": "application/json"
     }
-  };
-
-  reportLayer.addData(reportFeature);
-  map.closePopup();
+  })
+  .then(res => res.text())
+  .then(data => {
+    alert("Submitted successfully!");
+    // Optionally reset form
+    document.getElementById("problem").value = "";
+    document.getElementById("moreInfo").value = "";
+    document.getElementById("mediaUrl").value = "";
+    document.getElementById("name").value = "";
+  });
 }
 
 
-// Example: add tree emoji marker
-L.marker([7.9, 80.7], { icon: treeIcon }).addTo(map)
-  .bindPopup("Forest Area");
 
-// Example: add axe emoji marker
-L.marker([7.6, 80.4], { icon: axeIcon }).addTo(map)
-  .bindPopup("Deforestation Site");
-let searchedMarker = null;
+    
 
-function updateFormLocation(latlng, name) {
-  document.getElementById('locationInput').value = name + " (" + latlng.lat.toFixed(5) + ", " + latlng.lng.toFixed(5) + ")";
-}
-
-// Assuming you already have a search control:
-searchControl.on('results', function (data) {
-  if (data.results.length > 0) {
-    const latlng = data.results[0].latlng;
-    const name = data.results[0].name;
-
-    if (searchedMarker) map.removeLayer(searchedMarker);
-
-    searchedMarker = L.marker(latlng, {
-      icon: L.divIcon({
-        className: 'black-marker-icon',
-        html: "🪓"
-      })
-    }).addTo(map).bindPopup("You searched: " + name).openPopup();
-
-    updateFormLocation(latlng, name);
-  }
-});
-fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
-  method: "POST",
-  body: JSON.stringify({
-    place: searchedPlaceName,
-    lat: searchedLat,
-    lng: searchedLng,
-    problem: document.getElementById("problem").value,
-    more: document.getElementById("moreInfo").value,
-    media: document.getElementById("mediaUrl").value
-  }),
-  headers: {
-    "Content-Type": "application/json"
-  }
-})
-.then(res => res.text())
-.then(data => {
-  alert("Submitted successfully!");
-});
