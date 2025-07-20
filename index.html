@@ -24,10 +24,18 @@
      padding: 0;
      height: 100%;
      width: 100%;
-    
-     
+      
     }
 
+.legend {
+    background: white;
+    padding: 8px;
+    font-size: 12px;
+    line-height: 1.5em;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+   
     header {
       background: linear-gradient(to right, #00695c, #26a69a);
       color: white;
@@ -133,6 +141,17 @@
 
     </div>
 
+<div id="legend">
+  <h4>Forest Loss Year (2001–2023)</h4>
+  <div class="legend-item"><span style="background: #440154"></span> 2001</div>
+  <div class="legend-item"><span style="background: #482576"></span> 2005</div>
+  <div class="legend-item"><span style="background: #3b528b"></span> 2010</div>
+  <div class="legend-item"><span style="background: #2c728e"></span> 2015</div>
+  <div class="legend-item"><span style="background: #27ad81"></span> 2020</div>
+  <div class="legend-item"><span style="background: #5ec962"></span> 2023</div>
+</div>
+
+   
     <div id="map"></div>
   </main>
 
