@@ -182,3 +182,21 @@ searchControl.on('results', function (data) {
     updateFormLocation(latlng, name);
   }
 });
+fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
+  method: "POST",
+  body: JSON.stringify({
+    place: searchedPlaceName,
+    lat: searchedLat,
+    lng: searchedLng,
+    problem: document.getElementById("problem").value,
+    more: document.getElementById("moreInfo").value,
+    media: document.getElementById("mediaUrl").value
+  }),
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+.then(res => res.text())
+.then(data => {
+  alert("Submitted successfully!");
+});
