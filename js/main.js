@@ -149,17 +149,7 @@ function submitReport(lat, lng) {
   reportLayer.addData(reportFeature);
   map.closePopup();
 }
-const treeIcon = L.divIcon({
-  html: '🌲',
-  className: 'custom-icon',
-  iconSize: [20, 20]
-});
 
-const axeIcon = L.divIcon({
-  html: '🪓',
-  className: 'custom-icon',
-  iconSize: [20, 20]
-});
 
 // Example: add tree emoji marker
 L.marker([7.9, 80.7], { icon: treeIcon }).addTo(map)
@@ -168,3 +158,27 @@ L.marker([7.9, 80.7], { icon: treeIcon }).addTo(map)
 // Example: add axe emoji marker
 L.marker([7.6, 80.4], { icon: axeIcon }).addTo(map)
   .bindPopup("Deforestation Site");
+let searchedMarker = null;
+
+function updateFormLocation(latlng, name) {
+  document.getElementById('locationInput').value = name + " (" + latlng.lat.toFixed(5) + ", " + latlng.lng.toFixed(5) + ")";
+}
+
+// Assuming you already have a search control:
+searchControl.on('results', function (data) {
+  if (data.results.length > 0) {
+    const latlng = data.results[0].latlng;
+    const name = data.results[0].name;
+
+    if (searchedMarker) map.removeLayer(searchedMarker);
+
+    searchedMarker = L.marker(latlng, {
+      icon: L.divIcon({
+        className: 'black-marker-icon',
+        html: "🪓"
+      })
+    }).addTo(map).bindPopup("You searched: " + name).openPopup();
+
+    updateFormLocation(latlng, name);
+  }
+});
