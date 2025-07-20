@@ -33,7 +33,8 @@ body, html {
     position: absolute;
     bottom: 30px;
     left: 30px;
-    background: white;
+    background: #97969c;
+    color: black;
     padding: 10px;
     font-size: 12px;
     line-height: 18px;
@@ -42,6 +43,7 @@ body, html {
     z-index: 1000;
   }
 </style>
+
 
 
 #panel p {
