@@ -38,16 +38,4 @@ body, html {
 
 
 
-.report-box {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background-color: white;
-  padding: 10px;
-  border: 1px solid #444;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  width: 240px;
-  z-index: 9999;
-  font-size: 14px;
-}
 
