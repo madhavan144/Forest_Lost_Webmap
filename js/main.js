@@ -20,18 +20,7 @@ L.imageOverlay('forest_loss.png', imageBounds, {
   opacity: 0.8
 }).addTo(map);
 
-// Create a custom legend control
-const legend = L.control({ position: 'bottomright' });
 
-legend.onAdd = function (map) {
-  const div = L.DomUtil.create('div', 'info legend');
-  div.innerHTML += '<h4>Forest Loss</h4>';
-  div.innerHTML += '<p>Data from 2001 to 2023</p>';
-  div.innerHTML += '<img src="forest_loss.png" alt="Forest Loss Legend" style="width:150px;">';
-  return div;
-};
-
-legend.addTo(map);
 
 
 // Styling
@@ -111,21 +100,48 @@ const reportLayer = L.geoJSON([], {
   }
 }).addTo(map);
 
-// Add click handler to map for public reporting
-map.on('click', function (e) {
-  const latlng = e.latlng;
+function onDistrictClick(e) {
+  const clickedDistrict = e.target.feature.properties.shapeName;
+onEachFeature: function (feature, layer) {
+  layer.on({
+    click: onDistrictClick
+  });
+}
 
-  const popupContent = `
-    <b>Submit a Deforestation Report</b><br>
-    <textarea id="reportText" placeholder="Describe the deforestation issue..." rows="3" style="width: 100%;"></textarea><br>
-    <button onclick="submitReport(${latlng.lat}, ${latlng.lng})">Submit</button>
-  `;
+  // Clear previous chart or highlight
+  highlightDistrict(clickedDistrict);
 
-  L.popup()
-    .setLatLng(latlng)
-    .setContent(popupContent)
-    .openOn(map);
-});
+  // Filter reports for that district (assuming you have them loaded in `reportData`)
+  const districtReports = reportData.filter(r => r.district === clickedDistrict);
+
+  // Clear old markers
+  reportLayer.clearLayers();
+
+  // Group by issue type for same-color
+  const issueColors = {
+    "Tree Cutting": "red",
+    "Fire": "orange",
+    "Illegal Logging": "purple",
+    "Other": "blue"
+  };
+
+  districtReports.forEach(report => {
+    const issueType = report.issueType || "Other";
+    const color = issueColors[issueType] || "gray";
+
+    const marker = L.circleMarker([report.lat, report.lng], {
+      radius: 8,
+      color: color,
+      fillOpacity: 0.8
+    }).bindPopup(`
+      <b>${issueType}</b><br>
+      ${report.shortDescription}<br>
+      <i>${report.details}</i>
+    `);
+
+    reportLayer.addLayer(marker);
+  });
+}
 
 // Handle report submission
 function submitReport(lat, lng) {
