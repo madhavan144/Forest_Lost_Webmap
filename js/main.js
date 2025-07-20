@@ -89,3 +89,58 @@ function showChartImage(districtName) {
 
   document.querySelector('#chart-box h2').innerText = `Forest Loss: ${districtName}`;
 }
+// Create a layer group to hold public reports
+const reportLayer = L.geoJSON([], {
+  pointToLayer: function (feature, latlng) {
+    return L.circleMarker(latlng, {
+      radius: 6,
+      fillColor: '#ff4d4d',
+      color: '#fff',
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.9
+    });
+  },
+  onEachFeature: function (feature, layer) {
+    layer.bindPopup(`<b>Public Report:</b><br>${feature.properties.comment}`);
+  }
+}).addTo(map);
+
+// Add click handler to map for public reporting
+map.on('click', function (e) {
+  const latlng = e.latlng;
+
+  const popupContent = `
+    <b>Submit a Deforestation Report</b><br>
+    <textarea id="reportText" placeholder="Describe the deforestation issue..." rows="3" style="width: 100%;"></textarea><br>
+    <button onclick="submitReport(${latlng.lat}, ${latlng.lng})">Submit</button>
+  `;
+
+  L.popup()
+    .setLatLng(latlng)
+    .setContent(popupContent)
+    .openOn(map);
+});
+
+// Handle report submission
+function submitReport(lat, lng) {
+  const comment = document.getElementById("reportText").value.trim();
+  if (!comment) {
+    alert("Please enter a description.");
+    return;
+  }
+
+  const reportFeature = {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [lng, lat]
+    },
+    properties: {
+      comment: comment
+    }
+  };
+
+  reportLayer.addData(reportFeature);
+  map.closePopup();
+}
