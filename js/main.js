@@ -108,34 +108,29 @@ function submitForm() {
   const problem = document.getElementById("problem").value;
   const more = document.getElementById("moreInfo").value;
   const media = document.getElementById("mediaUrl").value;
-  const comment = document.getElementById("name").value;
+  const name = document.getElementById("name").value;
 
   if (!problem || !location) {
     alert("Please provide at least location and issue.");
     return;
   }
 
- fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    place: location,
-    problem: problem,
-    more: more,
-    media: media,
-    comment: additional_Details,
+  fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      place: location,
+      problem: problem,
+      more: more,
+      media: media,
+      name: name
+    }),
+    headers: {
+      "Content-Type": "application/json"
+    }
   })
-})
-.then(response => response.text())
-.then(data => {
-  console.log(" Successfully submitted:", data);
-})
-.catch(error => {
-  console.error(" Submission failed:", error);
-});
-
+  .then(res => res.text())
+  .then(data => {
+    alert("Submitted successfully!");
     // Optionally reset form
     document.getElementById("problem").value = "";
     document.getElementById("moreInfo").value = "";
@@ -166,4 +161,3 @@ function submitReportForm() {
 
 
     
-
