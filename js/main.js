@@ -8,6 +8,11 @@ const map = L.map('map', {
 const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd'
 }).addTo(map);
+L.Control.geocoder({
+  defaultMarkGeocode: true,
+  placeholder: 'Search for a place...'
+}).addTo(map);
+
 
 // Forest loss image overlay
 const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
@@ -144,3 +149,22 @@ function submitReport(lat, lng) {
   reportLayer.addData(reportFeature);
   map.closePopup();
 }
+const treeIcon = L.divIcon({
+  html: '🌲',
+  className: 'custom-icon',
+  iconSize: [20, 20]
+});
+
+const axeIcon = L.divIcon({
+  html: '🪓',
+  className: 'custom-icon',
+  iconSize: [20, 20]
+});
+
+// Example: add tree emoji marker
+L.marker([7.9, 80.7], { icon: treeIcon }).addTo(map)
+  .bindPopup("Forest Area");
+
+// Example: add axe emoji marker
+L.marker([7.6, 80.4], { icon: axeIcon }).addTo(map)
+  .bindPopup("Deforestation Site");
