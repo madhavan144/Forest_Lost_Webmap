@@ -151,15 +151,43 @@
 
 
 <!-- Reporting Box (bottom-left) -->
-<div id="reportBox" >
-  <h4>Report & Comment</h4>
-  <input type="text" id="locationInput" placeholder="Location" readonly><br>
-  <input type="text" id="problem" placeholder=" Issue (e.g. Tree Cutting)"><br>
-  <textarea id="moreInfo" placeholder="More details..."></textarea><br>
-  <input type="text" id="mediaUrl" placeholder="Photo or video URL"><br>
-  <input type="text" id="name" placeholder="Your Comment (optional)"><br>
-  <button onclick="submitForm()">Submit</button>
+<!-- Toggle Button -->
+<button id="toggleReportBtn" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
+  📋 Report Deforestation
+</button>
+
+<!-- Report Box (Initially Hidden) -->
+<div id="reportBox" style="
+  position: fixed;
+  bottom: 60px;
+  left: 20px;
+  width: 300px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: none;
+">
+  <h4 style="margin-top: 0;">📄 Submit Report</h4>
+  <label>Location:</label>
+  <input type="text" id="reportLocation" style="width: 100%;" placeholder="District or Coordinates"><br><br>
+
+  <label>Short Description:</label>
+  <input type="text" id="reportShort" style="width: 100%;" placeholder="E.g. Tree cutting"><br><br>
+
+  <label>Details:</label>
+  <textarea id="reportDetails" style="width: 100%;" rows="3" placeholder="More details..."></textarea><br><br>
+
+  <label>Upload Image/Video:</label>
+  <input type="file" id="reportFile"><br><br>
+
+  <label>Your Name (optional):</label>
+  <input type="text" id="reportName" style="width: 100%;"><br><br>
+
+  <button onclick="submitReport()">Submit Report</button>
 </div>
+
 
    
     <div id="map"></div>
