@@ -143,6 +143,17 @@ onEachFeature: function (feature, layer) {
   });
 }
 
+map.on('click', function(e) {
+  const lat = e.latlng.lat.toFixed(6);
+  const lng = e.latlng.lng.toFixed(6);
+  document.getElementById('reportLocation').value = `${lat}, ${lng}`;
+  reportLat = lat;
+  reportLng = lng;
+});
+
+
+
+
 // Handle report submission
 function submitReport(lat, lng) {
   const comment = document.getElementById("reportText").value.trim();
