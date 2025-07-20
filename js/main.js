@@ -8,10 +8,6 @@ const map = L.map('map', {
 const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd'
 }).addTo(map);
-L.Control.geocoder({
-  defaultMarkGeocode: true,
-  placeholder: 'Search for a place...'
-}).addTo(map);
 
 
 // Forest loss image overlay
