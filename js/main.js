@@ -165,11 +165,4 @@ searchControl.on('markgeocode', function(e) {
       alert("There was an error submitting your report.");
     });
   }
- function submitReportForm() {
-    alert("Report submitted!");
-    closeForm();
-  }
 
-  function closeForm() {
-    document.getElementById('report-box').style.display = 'none';
-  }
