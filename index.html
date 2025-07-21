@@ -23,7 +23,7 @@
       width: 100vw;
       overflow: hidden;
       font-family: 'Poppins', sans-serif;
-      background-color: #f5f7fc;
+      background-color: #222927;
     }
 
     #app {
@@ -67,7 +67,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-   footer {
+   .sidebar h3 {
       position: absolute;
       bottom: 0;
       width: 100%;
@@ -90,7 +90,7 @@
 
     #map {
       width: 100%;
-      height: 100%;
+      height: 90%;
       z-index: 1;
     }
 
@@ -115,15 +115,7 @@
     }
 
      #report-toggle-button button {
-      padding: 8px 12px;
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background-color: #66c2a5;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      position: fixed; bottom: 20px; left: 20px; z-index: 1000;padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px; cursor: pointer;
     }
 
     #report-box {
@@ -144,7 +136,10 @@
     <div class="sidebar">
       <h1>Shrinking Forests
 </h1>
-      <p> "24 Years of Vegetation Decline by District"
+        <h3>
+    &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects | University of Moratuwa
+  </h3>
+      <p> "District-wise Vegetation Cover Loss"
 </p>
         <div id="chart-box">
   <h2>Select a District to View Forest Loss</h2>
@@ -171,7 +166,6 @@
 
 
       <!-- Report Toggle -->
-      <div class="sidebar">
       <div id="report-toggle-button">
         <button onclick="toggleReportBox()">Click here to Comment...!</button>
       </div>
@@ -195,14 +189,13 @@
         <input type="text" id="name" style="width: 100%;"><br><br>
 
         <button onclick="submitReportForm()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
+        <button onclick="closeForm()">Close</button>
       </div>
     </div>
   </div>
 
 
-  <footer>
-    &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects | University of Moratuwa
-  </footer>
+
  </div> 
 <script src="js/main.js"></script>
 
