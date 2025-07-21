@@ -77,7 +77,8 @@ function showChartImage(districtName) {
   chartImg.alt = `Forest Loss Chart for ${districtName}`;
   chartImg.style.display = 'block';
 
-  document.querySelector('#chart-box h2').innerText = `Forest Loss: ${districtName}`;
+  document.querySelector('#chart-box h2').innerText = `Forest_Loss l
+  ${districtName}`;
 }
 
 
