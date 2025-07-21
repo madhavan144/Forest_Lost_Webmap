@@ -77,8 +77,8 @@ function showChartImage(districtName) {
   chartImg.alt = `Forest Loss Chart for ${districtName}`;
   chartImg.style.display = 'block';
 
-  document.querySelector('#chart-box h2').innerText = `Forest_Loss l
-  ${districtName}`;
+  document.querySelector('#chart-box h2').innerText =      `Forest_Loss -
+            ${districtName}`;
 }
 
 
@@ -104,53 +104,65 @@ searchControl.on('markgeocode', function(e) {
    document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
   });
 // Submit to Google Sheets Web App
-function submitForm() {
-  const location = document.getElementById("locationInput").value.trim();
-  const problem = document.getElementById("problem").value.trim();
-  const more = document.getElementById("moreInfo").value.trim();
-  const media = document.getElementById("mediaUrl").value.trim();
-  const name = document.getElementById("name").value.trim();
 
-  // Validation: Check required fields
-  if (!problem || !location) {
-    alert("Please provide both location and issue.");
-    return;
+  function toggleReportBox() {
+    const box = document.getElementById("report-box");
+    box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
   }
 
-  fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
-    method: "POST",
-    body: JSON.stringify({
-      place: location,
-      problem: problem,
-      more: more,
-      media: media,
-      name: name
-    }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  .then(res => res.text())
-  .then(data => {
-    alert("Submitted successfully!");
-    // Reset form fields
-    document.getElementById("locationInput").value = "";
-    document.getElementById("problem").value = "";
-    document.getElementById("moreInfo").value = "";
-    document.getElementById("mediaUrl").value = "";
-    document.getElementById("name").value = "";
-
-    // Hide form box after submission
+  function closeForm() {
     document.getElementById("report-box").style.display = "none";
-  });
-}
+  }
 
-function toggleReportBox() {
-  const box = document.getElementById("report-box");
-  box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
-}
+  function submitReportForm() {
+    // Get all values from form fields
+    const location = document.getElementById("location").value.trim();
+    const observations = document.getElementById("observations").value.trim();
+    const causeEffect = document.getElementById("causeEffect").value.trim();
+    const suggestions = document.getElementById("suggestions").value.trim();
+    const additionalComments = document.getElementById("additionalComments").value.trim();
+    const mediaFile = document.getElementById("mediaUpload").files[0];
 
-// This can be used for the Close button
-function closeReportBox() {
-  document.getElementById("report-box").style.display = "none";
-}
+    // Validate required fields
+    if (!location || !observations || !causeEffect || !suggestions || !additionalComments) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // Optional: convert file to base64 if you want to send it
+    // For now, just send text data
+
+    // Submit to Google Apps Script
+    fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        place: location,
+        problem: observations,
+        more: causeEffect,
+        media: mediaFile ? mediaFile.name : "",
+        name: suggestions + " | " + additionalComments
+      })
+    })
+    .then(res => res.text())
+    .then(data => {
+      alert("Submitted successfully!");
+      // Reset form
+      document.getElementById("location").value = "";
+      document.getElementById("observations").value = "";
+      document.getElementById("causeEffect").value = "";
+      document.getElementById("suggestions").value = "";
+      document.getElementById("additionalComments").value = "";
+      document.getElementById("mediaUpload").value = "";
+
+      // Hide the form after submission
+      closeForm();
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("There was an error submitting your report.");
+    });
+  }
+
