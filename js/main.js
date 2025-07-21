@@ -104,14 +104,15 @@ searchControl.on('markgeocode', function(e) {
   });
 // Submit to Google Sheets Web App
 function submitForm() {
-  const location = document.getElementById("locationInput").value;
-  const problem = document.getElementById("problem").value;
-  const more = document.getElementById("moreInfo").value;
-  const media = document.getElementById("mediaUrl").value;
-  const name = document.getElementById("name").value;
+  const location = document.getElementById("locationInput").value.trim();
+  const problem = document.getElementById("problem").value.trim();
+  const more = document.getElementById("moreInfo").value.trim();
+  const media = document.getElementById("mediaUrl").value.trim();
+  const name = document.getElementById("name").value.trim();
 
+  // Validation: Check required fields
   if (!problem || !location) {
-    alert("Please provide at least location and issue.");
+    alert("Please provide both location and issue.");
     return;
   }
 
@@ -131,33 +132,24 @@ function submitForm() {
   .then(res => res.text())
   .then(data => {
     alert("Submitted successfully!");
-    // Optionally reset form
+    // Reset form fields
+    document.getElementById("locationInput").value = "";
     document.getElementById("problem").value = "";
     document.getElementById("moreInfo").value = "";
     document.getElementById("mediaUrl").value = "";
     document.getElementById("name").value = "";
+
+    // Hide form box after submission
+    document.getElementById("report-box").style.display = "none";
   });
-
-  document.getElementById('toggleReportBtn').addEventListener('click', function () {
-  const box = document.getElementById('reportBox');
-  box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
-});
-
 }
+
 function toggleReportBox() {
   const box = document.getElementById("report-box");
-  if (box.style.display === "none" || box.style.display === "") {
-    box.style.display = "block";
-  } else {
-    box.style.display = "none";
-  }
+  box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
 }
 
-function submitReportForm() {
-  // You can handle form submission here (to Google Sheets or wherever)
-  alert("Thank you for submitting the report!");
+// This can be used for the Close button
+function closeReportBox() {
+  document.getElementById("report-box").style.display = "none";
 }
-
-
-
-    
