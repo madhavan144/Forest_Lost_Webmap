@@ -144,10 +144,10 @@
     <div class="sidebar">
       <h1>Forest Loss in Sri Lanka</h1>
       <p>Interactive Map & Reporting Tool</p>
-      <div class="chart-box">
-        <h3>Select a District</h3>
-        <img id="chart-image" src="" alt="District Chart" />
-      </div>
+        <div id="chart-box">
+  <h2>Select a District to View Forest Loss</h2>
+  <img id="chart-image" src="" alt="District Chart" style="max-width:100%; display:none;" />
+</div>
     </div>
 
     <!-- Map Section -->
@@ -169,6 +169,7 @@
 
 
       <!-- Report Toggle -->
+      <div class="sidebar">
       <div id="report-toggle-button">
         <button onclick="toggleReportBox()">Click here to Comment...!</button>
       </div>
@@ -196,9 +197,11 @@
     </div>
   </div>
 
+ <div class="sidebar">
   <footer>
     &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects | University of Moratuwa
   </footer>
+ </div> 
 <script src="js/main.js"></script>
 
   
