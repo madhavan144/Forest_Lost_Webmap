@@ -120,7 +120,7 @@ searchControl.on('markgeocode', function(e) {
     const observations = document.getElementById("observations").value.trim();
     const causeEffect = document.getElementById("causeEffect").value.trim();
     const suggestions = document.getElementById("suggestions").value.trim();
-    const additionalComments = document.getElementById("additionalComments").value.trim();
+    const issueType = document.getElementById("issueType").value.trim();
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
@@ -157,6 +157,16 @@ searchControl.on('markgeocode', function(e) {
       document.getElementById("additionalComments").value = "";
       document.getElementById("mediaUpload").value = "";
 
+
+      // Try to add marker on map after submission
+L.Control.Geocoder.nominatim().geocode(location, function(results) {
+  if (results.length > 0) {
+    const latlng = results[0].center;
+    addReportMarker(latlng, issueType, observations);
+  }
+});
+
+
       // Hide the form after submission
       closeForm();
     })
@@ -173,3 +183,32 @@ searchControl.on('markgeocode', function(e) {
   function closeForm() {
     document.getElementById('report-box').style.display = 'none';
   }
+
+
+// Icon colors for different issue types
+const iconColors = {
+  "Tree Cutting": "red",
+  "Illegal Burning": "orange",
+  "Land Clearing": "green",
+  "Wildlife Displaced": "purple",
+  "Other": "gray"
+};
+
+function getMarkerOptions(issueType) {
+  return {
+    radius: 8,
+    fillColor: iconColors[issueType] || "blue",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+}
+
+// Show marker on map
+function addReportMarker(latlng, issueType, description) {
+  L.circleMarker(latlng, getMarkerOptions(issueType))
+    .addTo(map)
+    .bindPopup(`<b>${issueType}</b><br>${description}`);
+}
+
