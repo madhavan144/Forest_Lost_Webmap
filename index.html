@@ -132,7 +132,8 @@
     height: 400px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
     font-family: sans-serif;
-
+    overflow-y: auto; 
+      
     input[type="text"], textarea {
     font-size: 12px;
     border-radius: 5px;
@@ -189,20 +190,16 @@
        <div style="max-height: 340px; overflow-y: auto;">
         <label>Location:</label><br>
         <input type="text" id="location" style="width: 100%;"><br><br>
-
          <label>Issue Type:</label><br />
-  <select id="issueType" style="width: 100%;">
-    <option value="Tree Cutting">Tree Cutting</option>
-    <option value="Illegal Burning">Illegal Burning</option>
-    <option value="Land Clearing">Land Clearing</option>
-    <option value="Wildlife Displaced">Wildlife Displaced</option>
-    <option value="Other">Other</option>
-  </select><br /><br />
-      <label>Details:</label><br />
-  <textarea id="details" rows="3" style="width: 100%;"></textarea><br /><br />
-</div>
+<select id="issueType" style="width: 100%;">
+  <option value="Tree Cutting">Tree Cutting</option>
+  <option value="Illegal Burning">Illegal Burning</option>
+  <option value="Land Clearing">Land Clearing</option>
+  <option value="Wildlife Displaced">Wildlife Displaced</option>
+  <option value="Other">Other</option>
+</select><br /><br />
 
-        <label>Local Knowledge & Observations:</label><br>
+        <label>Observations:</label><br>
         <input id="details" rows="3" style="width: 100%;"><br><br>
 
         <label>Cause & Effect (Community Insight):</label><br>
