@@ -170,6 +170,7 @@
       <!-- Report Box -->
       <div id="report-box">
         <h4 style="margin-top: 0;"> Report & Comment </h4>
+       <div style="max-height: 340px; overflow-y: auto;">
         <label>Location:</label><br>
         <input type="text" id="location" style="width: 100%;"><br><br>
 
@@ -187,6 +188,9 @@
 
         <label>Additional Comments:</label><br>
         <input type="text" id="name" style="width: 100%;"><br><br>
+       </div>
+
+        <div style="text-align: right;">
 
         <button onclick="submitReportForm()" style="padding: 8px 12px; background-color: #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
         <button onclick="closeForm()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px;">Close</button>
