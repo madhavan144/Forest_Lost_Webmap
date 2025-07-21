@@ -116,10 +116,13 @@
       left: 340px;
       z-index: 1000;
     }
+     #report-toggle-button button {
+      position: fixed; bottom: 80px; left: 20px; z-index: 1000;padding: 8px 12px; background-color: #66c2a5; color: white; border: none; border-radius: 6px; cursor: pointer;
+    }
     #report-box {
     position: fixed;
     bottom: 70;
-    left: 0;
+    right: 0;
     z-index: 1000;
     display: none;
     background: #d5e6de;
@@ -136,13 +139,6 @@
     border: 1px solid #aaa;
     padding: 4px;
   }
-
-     #report-toggle-button button {
-      position: fixed; bottom: 80px; left: 20px; z-index: 1000;padding: 8px 12px; background-color: #66c2a5; color: white; border: none; border-radius: 6px; cursor: pointer;
-    }
-
-    
-    
 
 
   </style>
@@ -209,8 +205,6 @@
         <label>Additional Comments:</label><br>
         <input type="text" id="name" style="width: 100%;"><br><br>
        </div>
-
-        <div style="text-align: right;">
 
         <button onclick="submitReportForm()" style="padding: 8px 12px; background-color: #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
         <button onclick="closeForm()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px;">Close</button>
