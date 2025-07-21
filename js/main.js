@@ -5,7 +5,7 @@ const map = L.map('map', {
 }).setView([7.8731, 80.7718], 7);
 
 // Dark basemap with NO labels
-const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd'
 }).addTo(map);
 
@@ -72,13 +72,13 @@ fetch('data/sri_lanka_districts.geojson')
 // Function to show chart image by district name
 function showChartImage(districtName) {
   const chartImg = document.getElementById('chart-image');
-  const imagePath = charts/${districtName}.jpg;
+  const imagePath = `charts/${districtName}.jpg`;
   chartImg.src = imagePath;
-  chartImg.alt = Forest Loss Chart for ${districtName};
+  chartImg.alt = `Forest Loss Chart for ${districtName}`;
   chartImg.style.display = 'block';
 
-  document.querySelector('#chart-box h2').innerText =      Forest_Loss -
-            ${districtName};
+  document.querySelector('#chart-box h2').innerText =      `Forest_Loss -
+            ${districtName}`;
 }
 
 
@@ -101,7 +101,7 @@ searchControl.on('markgeocode', function(e) {
   searchedMarker = L.marker(latlng).addTo(map)
     .bindPopup(name).openPopup();
 
-   document.getElementById('location').value = ${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)});
+   document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
   });
 // Submit to Google Sheets Web App
 
@@ -164,4 +164,12 @@ searchControl.on('markgeocode', function(e) {
       console.error("Error:", error);
       alert("There was an error submitting your report.");
     });
-  }                      
+  }
+ function submitReportForm() {
+    alert("Report submitted!");
+    closeForm();
+  }
+
+  function closeForm() {
+    document.getElementById('report-box').style.display = 'none';
+  }
