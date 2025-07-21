@@ -5,10 +5,9 @@ const map = L.map('map', {
 }).setView([7.8731, 80.7718], 7);
 
 // Dark basemap with NO labels
-const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; CARTO &copy; OpenStreetMap contributors',
-    maxZoom: 19,
-  });                                          
+const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd'
+}).addTo(map);
 
 
 // Forest loss image overlay
@@ -73,13 +72,13 @@ fetch('data/sri_lanka_districts.geojson')
 // Function to show chart image by district name
 function showChartImage(districtName) {
   const chartImg = document.getElementById('chart-image');
-  const imagePath = `charts/${districtName}.jpg`;
+  const imagePath = charts/${districtName}.jpg;
   chartImg.src = imagePath;
-  chartImg.alt = `Forest Loss Chart for ${districtName}`;
+  chartImg.alt = Forest Loss Chart for ${districtName};
   chartImg.style.display = 'block';
 
-  document.querySelector('#chart-box h2').innerText =      `Forest_Loss -
-            ${districtName}`;
+  document.querySelector('#chart-box h2').innerText =      Forest_Loss -
+            ${districtName};
 }
 
 
@@ -102,7 +101,7 @@ searchControl.on('markgeocode', function(e) {
   searchedMarker = L.marker(latlng).addTo(map)
     .bindPopup(name).openPopup();
 
-   document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
+   document.getElementById('location').value = ${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)});
   });
 // Submit to Google Sheets Web App
 
@@ -121,7 +120,7 @@ searchControl.on('markgeocode', function(e) {
     const observations = document.getElementById("observations").value.trim();
     const causeEffect = document.getElementById("causeEffect").value.trim();
     const suggestions = document.getElementById("suggestions").value.trim();
-    const issueType = document.getElementById("issueType").value.trim();
+    const additionalComments = document.getElementById("additionalComments").value.trim();
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
@@ -165,36 +164,4 @@ searchControl.on('markgeocode', function(e) {
       console.error("Error:", error);
       alert("There was an error submitting your report.");
     });
-  }
-
-
-// Icon colors for different issue types
-const iconColors = {
-  "Tree Cutting": "red",
-  "Illegal Burning": "orange",
-  "Land Clearing": "green",
-  "Wildlife Displaced": "purple",
-  "Other": "gray"
-};
-
-function getMarkerOptions(issueType) {
-  return {
-    radius: 8,
-    fillColor: iconColors[issueType] || "blue",
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
-  };
-}
-
-// Show marker on map
-function addReportMarker(latlng, issueType, description) {
-  L.circleMarker(latlng, getMarkerOptions(issueType))
-    .addTo(map)
-    .bindPopup(`<b>${issueType}</b><br>${description}`);
-}
-
-
-
-
+  }                      
