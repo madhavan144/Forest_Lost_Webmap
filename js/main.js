@@ -5,9 +5,10 @@ const map = L.map('map', {
 }).setView([7.8731, 80.7718], 7);
 
 // Dark basemap with NO labels
-const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd'
-}).addTo(map);
+const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; CARTO &copy; OpenStreetMap contributors',
+    maxZoom: 19,
+  });                                          
 
 
 // Forest loss image overlay
@@ -120,7 +121,7 @@ searchControl.on('markgeocode', function(e) {
     const observations = document.getElementById("observations").value.trim();
     const causeEffect = document.getElementById("causeEffect").value.trim();
     const suggestions = document.getElementById("suggestions").value.trim();
-    const additionalComments = document.getElementById("additionalComments").value.trim();
+    const issueType = document.getElementById("issueType").value.trim();
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
@@ -165,4 +166,35 @@ searchControl.on('markgeocode', function(e) {
       alert("There was an error submitting your report.");
     });
   }
+
+
+// Icon colors for different issue types
+const iconColors = {
+  "Tree Cutting": "red",
+  "Illegal Burning": "orange",
+  "Land Clearing": "green",
+  "Wildlife Displaced": "purple",
+  "Other": "gray"
+};
+
+function getMarkerOptions(issueType) {
+  return {
+    radius: 8,
+    fillColor: iconColors[issueType] || "blue",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+}
+
+// Show marker on map
+function addReportMarker(latlng, issueType, description) {
+  L.circleMarker(latlng, getMarkerOptions(issueType))
+    .addTo(map)
+    .bindPopup(`<b>${issueType}</b><br>${description}`);
+}
+
+
+
 
