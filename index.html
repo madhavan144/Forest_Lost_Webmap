@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -12,181 +12,203 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Leaflet Control Geocoder -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
-/>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
-
-  <!-- Style -->
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
       font-family: 'Poppins', sans-serif;
-      background-color:#f7f6ff;
-      background-size: cover;
-     
-     padding: 0;
-     height: 100%;
-     width: 100%;
-      
+      background-color: #f5f7fc;
     }
 
-
-  .legend {
-    position: absolute;
-    bottom: 30px;
-    left: 30px;
-    background: white;
-    padding: 10px;
-    font-size: 12px;
-    line-height: 18px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    z-index: 1000;
-  }
-
-
-   
-    header {
-      background: linear-gradient(to right, #00695c, #26a69a);
-      color: white;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      color:white;
-      text-align: center;
-      font-size: 2rem;
-    }
-
-    header p {
-      margin: 0.3rem 0 0;
-      color:white;
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    main {
+    #app {
       display: flex;
-      padding: 20px;
-      gap: 10px;
+      height: 100%;
+      width: 100%;
     }
 
-    #chart-form-container {
-      width: 45%;
+    .sidebar {
+      width: 300px;
+      background: #1f2b73;
+      color: white;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-    }
-
-    #chart-box h2{
-      background: White;
       padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
-     margin-bottom: 10px;
+      box-sizing: border-box;
     }
 
+    .sidebar h1 {
+      font-size: 20px;
+      margin: 0 0 10px;
+    }
+
+    .sidebar p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .sidebar .chart-box {
+      background: white;
+      color: black;
+      margin-top: 30px;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #chart-image {
+      max-width: 100%;
+      display: none;
+    }
+
+    .map-container {
+      flex: 1;
+      position: relative;
+    }
 
     #map {
-      width: 55%;
-      height: 600px;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+      width: 100%;
+      height: 100%;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      z-index: 1;
+    }
+
+    .legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: white;
+      padding: 10px;
+      font-size: 12px;
+      line-height: 18px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      z-index: 1000;
+    }
+
+    #report-toggle-button, #report-box {
+      position: absolute;
+      bottom: 20px;
+      left: 340px;
+      z-index: 1000;
+    }
+
+    #report-toggle-button button {
+      padding: 8px 12px;
+      background-color: #66c2a5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #report-box {
+      display: none;
+      background: white;
+      padding: 12px;
+      border-radius: 10px;
+      width: 260px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
     }
 
     footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
       text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
+      padding: 10px;
+      font-size: 12px;
       background: #66c2a5;
-       color:white;
-      margin-top: 20px;
+      color: white;
     }
-
-    @media (max-width: 950px) {
-      main {
-        flex-direction: column;
-      }
-      #map, #chart-form-container {
-        width: 100%;
-      }
-      
-      
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>Forest Loss in Sri Lanka </h1>
-    <p>Interactive Map & Public Reporting Tool</p>
-  </header>
-
-  <main>
-    <div id="chart-form-container">
-
-     <div id="chart-box">
-  <h2>Select a District to View Forest Loss</h2>
-  <img id="chart-image" src="" alt="District Chart" style="max-width:100%; display:none;" />
-</div>
-     
-
-
+  <div id="app">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h1>Forest Loss in Sri Lanka</h1>
+      <p>Interactive Map & Reporting Tool</p>
+      <div class="chart-box">
+        <h3>Select a District</h3>
+        <img id="chart-image" src="" alt="District Chart" />
+      </div>
     </div>
 
-   <div id="legend" class="legend">
-    <b style="color: black;">Forest Loss by Year</b><br>
-    <i style="background:#440154;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 2001–2005<br>
-    <i style="background:#31688e;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 2006–2010<br>
-    <i style="background:#35b779;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 2011–2015<br>
-    <i style="background:#fde725;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 2016–2020<br>
-    <i style="background:#ffea46;width:15px;height:15px;display:inline-block;margin-right:5px;"></i> 2021–2023
-  
+    <!-- Map Section -->
+    <div class="map-container">
+      <div id="map"></div>
+
+      <!-- Legend -->
+      <div id="legend" class="legend">
+  <b style="color: black;">Forest Loss by year (0–24)</b>
+  <div style="width: 200px; height: 15px; background: linear-gradient(to right, #0b0405, #170c14, #211424, #2b1c35, #342446, #3a2c58, #3e356b, #413e7e, #40498e, #3b5698, #38639d, #366fa0, #357ba3, #3487a6, #3492a8, #359fab, #39abac, #3fb6ad, #4bc2ad, #5dcdad, #7ad6ae, #99ddb6, #b4e5c3, #cbedd5, #def5e5); border: 1px solid #999; margin: 5px 0;"></div>
+  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+    <span>0</span>
+    <span>6</span>
+    <span>12</span>
+    <span>18</span>
+    <span>24</span>
+  </div>
 </div>
 
 
+      <!-- Report Toggle -->
+      <div id="report-toggle-button">
+        <button onclick="toggleReportBox()">Click here to Comment...!</button>
+      </div>
 
-<!-- Report Button -->
-<div id="report-toggle-button" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
-  <button onclick="toggleReportBox()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px; cursor: pointer;">
-    Clik here to Comment...!
-  </button>
-</div>
+      <!-- Report Box -->
+      <div id="report-box">
+        <h4 style="margin-top: 0;">Deforestation Report</h4>
+        <label>Location:</label><br>
+        <input type="text" id="location" style="width: 100%;"><br><br>
 
-<!-- Hidden Report Box -->
-<div id="report-box" style="display: none; position: fixed; bottom: 60px; left: 20px; z-index: 1000; background-color: white; padding: 10px; border-radius: 10px; width: 260px; box-shadow: 0 0 12px rgba(0,0,0,0.4);">
-  <h4 style="margin-top: 0;">Deforestation Report</h4>
-  <label>Location:</label><br>
-  <input type="text" id="location" style="width: 100%;"><br><br>
+        <label>Short Description:</label><br>
+        <input type="text" id="shortDesc" style="width: 100%;"><br><br>
 
-  <label>Short Description:</label><br>
-  <input type="text" id="shortDesc" style="width: 100%;"><br><br>
+        <label>Details:</label><br>
+        <textarea id="details" rows="3" style="width: 100%;"></textarea><br><br>
 
-  <label>Details:</label><br>
-  <textarea id="details" rows="3" style="width: 100%;"></textarea><br><br>
+        <label>Upload Media:</label><br>
+        <input type="file" id="mediaUpload"><br><br>
 
-  <label>Upload Image/Video:</label><br>
-  <input type="file" id="mediaUpload"><br><br>
+        <label>Additional Comments:</label><br>
+        <input type="text" id="name" style="width: 100%;"><br><br>
 
-  <label>Your Additional Comments (optional):</label><br>
-  <input type="text" id="name" style="width: 100%;"><br><br>
-
-  <button onclick="submitReportForm()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
-</div>
-
-   
-    <div id="map"></div>
-  </main>
+        <button onclick="submitReportForm()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
+      </div>
+    </div>
+  </div>
 
   <footer>
-    &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects l University of Moratuwa
+    &copy; 2025 Forest Monitoring Tool – Developed for GIS & Remote Sensing Projects | University of Moratuwa
   </footer>
 
-  <script src="js/main.js"></script>
+  <script>
+    function toggleReportBox() {
+      const box = document.getElementById("report-box");
+      box.style.display = box.style.display === "none" ? "block" : "none";
+    }
 
+    function submitReportForm() {
+      alert("Report submitted successfully!");
+    }
+
+    // Basic Leaflet Map
+    const map = L.map('map').setView([7.8731, 80.7718], 7);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.Control.geocoder().addTo(map);
+  </script>
 </body>
-</html> 
+</html>
