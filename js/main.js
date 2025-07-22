@@ -1,13 +1,11 @@
-const map = L.map('map', {
-  zoomControl: true,
-  attributionControl: false
-}).setView([7.8731, 80.7718], 7);
+const map = L.map('map').setView([7.8, 80.7], 7);
 
-// Dark basemap with NO labels
-const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd',
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+// Add light basemap (CartoDB Positron)
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
+  subdomains: 'abcd'
 }).addTo(map);
+
 
 
 
