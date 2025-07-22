@@ -4,7 +4,7 @@ const map = L.map('map', {
   attributionControl: false
 }).setView([7.8731, 80.7718], 7);
 
- basemap with NO labels
+// basemap with NO labels
 const lightNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd'
 }).addTo(map);
