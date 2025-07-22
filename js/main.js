@@ -3,12 +3,13 @@ const map = L.map('map', {
   attributionControl: false
 }).setView([7.8731, 80.7718], 7);
 
-// Carto Dark basemap with labels
-const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+// Carto Light basemap with labels
+const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd',
   maxZoom: 19,
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
 }).addTo(map);
+
 
 
 
