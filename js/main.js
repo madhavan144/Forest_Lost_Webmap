@@ -113,6 +113,9 @@ searchControl.on('markgeocode', function(e) {
     box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
   }
 
+  function closeForm() {
+    document.getElementById("report-box").style.display = "none";
+  }
 
   function submitReportForm() {
     // Get all values from form fields
@@ -124,7 +127,7 @@ searchControl.on('markgeocode', function(e) {
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
-    if (!location || !observations || !causeEffect  ) {
+    if (!location || !observations || !causeEffect || !issueType || !suggestions || !additionalComments) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -133,8 +136,8 @@ searchControl.on('markgeocode', function(e) {
     // For now, just send text data
 
     // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycbwYoXO3Gq4JeFw0Nt3moYAE_i2bXLKiBdIW2n5HdLAvlPaSr6pp6MCUW0nR-88jPv5rEQ/exec"
-          method: "POST",
+    fetch("https://script.google.com/macros/library/d/1ru6V6gokQBz0Li06_qac0zeDBof8lgg7gli_F4PpPhwSvxkymFjy8_SX/1", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
@@ -175,7 +178,8 @@ L.Control.Geocoder.nominatim().geocode(location, function(results) {
       alert("There was an error submitting your report.");
     });
   }
-
+ function submitReportForm() {
+    alert("Report submitted!");
     closeForm();
   }
 
