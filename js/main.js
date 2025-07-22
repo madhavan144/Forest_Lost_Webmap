@@ -124,25 +124,14 @@ searchControl.on('markgeocode', function(e) {
     const causeEffect = document.getElementById("causeEffect").value.trim();
     const suggestions = document.getElementById("suggestions").value.trim();
     const issueType = document.getElementById("issueType").value.trim();
-    const additionalComments = document.getElementById("additionalComments").value.trim();
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
-    if (!location || !observations || !causeEffect || !issueType || !suggestions ) {
+    if (!location || !observations || !causeEffect || !issueType || !suggestions || !additionalComments) {
       alert("Please fill in all required fields.");
       return;
     }
 
-  
-  // ✅ Reset the form after submission
-  document.getElementById("report-form").reset();
-
-  // ✅ Close the form popup (if function exists)
-  closeForm();
-
-  // ✅ Show success message
-  alert("Report submitted!");
-}
     // Optional: convert file to base64 if you want to send it
     // For now, just send text data
 
@@ -163,15 +152,6 @@ searchControl.on('markgeocode', function(e) {
     .then(res => res.text())
     .then(data => {
       alert("Submitted successfully!");
-
-       document.getElementById("report-form").reset();
-
-  // ✅ Close the form popup (if function exists)
-  closeForm();
-
-  // ✅ Show success message
-  alert("Report submitted!");
-}
       // Reset form
       document.getElementById("location").value = "";
       document.getElementById("observations").value = "";
@@ -198,6 +178,9 @@ L.Control.Geocoder.nominatim().geocode(location, function(results) {
       alert("There was an error submitting your report.");
     });
   }
+ function submitReportForm() {
+    alert("Report submitted!");
+    closeForm();
   }
 
   function closeForm() {
