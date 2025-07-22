@@ -124,14 +124,37 @@ searchControl.on('markgeocode', function(e) {
     const causeEffect = document.getElementById("causeEffect").value.trim();
     const suggestions = document.getElementById("suggestions").value.trim();
     const issueType = document.getElementById("issueType").value.trim();
+    const additionalComments = document.getElementById("additionalComments").value.trim();
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
-    if (!location || !observations || !causeEffect || !issueType || !suggestions || !additionalComments) {
+    if (!location || !observations || !causeEffect || !issueType || !suggestions ) {
       alert("Please fill in all required fields.");
       return;
     }
 
+  const formData = new FormData();
+  formData.append("location", location);
+  formData.append("observations", observations);
+  formData.append("causeEffect", causeEffect);
+  formData.append("issuetype", issuetype);
+  formData.append("suggestions", suggestions);
+  formData.append("additionalComments", additionalComments);
+  if (mediaUpload) {
+    formData.append("mediaUpload", mediaUpload);
+  }
+  // Simulate form submission (you can replace with actual fetch if needed)
+  console.log("Submitting form data:", Object.fromEntries(formData));
+
+  // ✅ Reset the form after submission
+  document.getElementById("report-form").reset();
+
+  // ✅ Close the form popup (if function exists)
+  closeForm();
+
+  // ✅ Show success message
+  alert("Report submitted!");
+}
     // Optional: convert file to base64 if you want to send it
     // For now, just send text data
 
@@ -178,9 +201,6 @@ L.Control.Geocoder.nominatim().geocode(location, function(results) {
       alert("There was an error submitting your report.");
     });
   }
- function submitReportForm() {
-    alert("Report submitted!");
-    closeForm();
   }
 
   function closeForm() {
