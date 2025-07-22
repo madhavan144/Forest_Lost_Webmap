@@ -133,19 +133,7 @@ searchControl.on('markgeocode', function(e) {
       return;
     }
 
-  const formData = new FormData();
-  formData.append("location", location);
-  formData.append("observations", observations);
-  formData.append("causeEffect", causeEffect);
-  formData.append("issuetype", issuetype);
-  formData.append("suggestions", suggestions);
-  formData.append("additionalComments", additionalComments);
-  if (mediaUpload) {
-    formData.append("mediaUpload", mediaUpload);
-  }
-  // Simulate form submission (you can replace with actual fetch if needed)
-  console.log("Submitting form data:", Object.fromEntries(formData));
-
+  
   // ✅ Reset the form after submission
   document.getElementById("report-form").reset();
 
@@ -175,6 +163,15 @@ searchControl.on('markgeocode', function(e) {
     .then(res => res.text())
     .then(data => {
       alert("Submitted successfully!");
+
+       document.getElementById("report-form").reset();
+
+  // ✅ Close the form popup (if function exists)
+  closeForm();
+
+  // ✅ Show success message
+  alert("Report submitted!");
+}
       // Reset form
       document.getElementById("location").value = "";
       document.getElementById("observations").value = "";
