@@ -133,7 +133,7 @@ searchControl.on('markgeocode', function(e) {
     // For now, just send text data
 
     // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbx5uesXt1xpRdxQjvSkOXh6sqeTTo8W_vQZ82d6zdmQM_95Ace0Kvs_uoBkOZPy7CbY/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
