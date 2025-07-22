@@ -1,11 +1,12 @@
-
+const map = L.map('map', {
+  zoomControl: true,
+  attributionControl: false
+}).setView([7.8731, 80.7718], 7);
 
 // Basemap with NO labels and reduced opacity
 const map = L.map('map').setView([7.6500, 79.9000], 9);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd',
-  maxZoom: 19
 }).addTo(map);
 
 
