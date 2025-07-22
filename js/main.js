@@ -2,11 +2,11 @@ const map = L.map('map', {
   zoomControl: true,
   attributionControl: false
 }).setView([7.8731, 80.7718], 7);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
-  subdomains: 'abcd',
-}).addTo(map);
 
+// Dark basemap with NO labels
+const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd'
+}).addTo(map);
 
 
 
