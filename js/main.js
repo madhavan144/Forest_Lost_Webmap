@@ -1,8 +1,15 @@
-    const map = L.map('map').setView([7.8, 80.7], 7);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
-      subdomains: 'abcd'
-    }).addTo(map);
+const map = L.map('map', {
+  zoomControl: true,
+  attributionControl: false
+}).setView([7.8731, 80.7718], 7);
+
+// Dark basemap with NO labels
+const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+}).addTo(map);
+
 
 
 
@@ -116,11 +123,10 @@ searchControl.on('markgeocode', function(e) {
     const causeEffect = document.getElementById("causeEffect").value.trim();
     const suggestions = document.getElementById("suggestions").value.trim();
     const issueType = document.getElementById("issueType").value.trim();
-    const mediaFile = document.getElementById("additionalcomment").files[0];
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
-    if (!location || !observations || !causeEffect  ||issuetype|| !suggestions || !additionalComments) {
+    if (!location || !observations || !causeEffect || !suggestions || !additionalComments) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -129,7 +135,7 @@ searchControl.on('markgeocode', function(e) {
     // For now, just send text data
 
     // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycbyTuzJRq24yqFFJZ4K04VkgKgnWgAwMsfy9Pkz5zZZ16JSWZI3F1cw-9ZY2nkcO4n4lQg/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbx5uesXt1xpRdxQjvSkOXh6sqeTTo8W_vQZ82d6zdmQM_95Ace0Kvs_uoBkOZPy7CbY/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -145,7 +151,6 @@ searchControl.on('markgeocode', function(e) {
     .then(res => res.text())
     .then(data => {
       alert("Submitted successfully!");
-      
       // Reset form
       document.getElementById("location").value = "";
       document.getElementById("observations").value = "";
@@ -208,4 +213,3 @@ function addReportMarker(latlng, issueType, description) {
     .addTo(map)
     .bindPopup(`<b>${issueType}</b><br>${description}`);
 }
-
