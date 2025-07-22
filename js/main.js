@@ -4,9 +4,12 @@ const map = L.map('map', {
   attributionControl: false
 }).setView([7.8731, 80.7718], 7);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
-      subdomains: 'abcd',
+// Basemap with NO labels and reduced opacity
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd',
+  opacity: 0.8  // Set your desired opacity here
+}).addTo(map);
 
 
 
@@ -14,7 +17,6 @@ const map = L.map('map', {
 // Forest loss image overlay
 const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
 L.imageOverlay('forest_loss.png', imageBounds, {
-  opacity: 0.8
 }).addTo(map);
 
 
@@ -24,7 +26,7 @@ L.imageOverlay('forest_loss.png', imageBounds, {
 function getHighlightStyle() {
   return {
     color: '#66c2a5',
-    weight: 1.5,
+    weight: 1,
     fillOpacity: 0.3,
     fillColor: '#66c2a5'
   };
