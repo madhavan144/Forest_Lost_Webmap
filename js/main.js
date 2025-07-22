@@ -6,7 +6,6 @@ const map = L.map('map', {
 // Dark basemap with NO labels
 const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd',
-  maxZoom: 19,
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
 }).addTo(map);
 
