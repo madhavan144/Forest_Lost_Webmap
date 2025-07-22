@@ -1,12 +1,9 @@
 const map = L.map('map').setView([7.8, 80.7], 7);
 
-// Add light basemap (CartoDB Positron)
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
-  subdomains: 'abcd'
-}).addTo(map);
-
-
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
+      subdomains: 'abcd'
+    }).addTo(map);
 
 
 
