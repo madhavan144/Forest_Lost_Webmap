@@ -104,59 +104,26 @@ searchControl.on('markgeocode', function(e) {
    document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
   });
 // Submit to Google Sheets Web App
+let submitted = false;
 
-  function toggleReportBox() {
-    const box = document.getElementById("report-box");
-    box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+  const toggleBtn = document.getElementById('report-toggle-button');
+  const formContainer = document.getElementById('report-form-container');
+
+  toggleBtn.addEventListener('click', () => {
+    formContainer.style.display = (formContainer.style.display === 'block') ? 'none' : 'block';
+  });
+
+  function handleSuccess() {
+    document.getElementById('gform').style.display = 'none';
+    document.getElementById('success-message').style.display = 'block';
+
+    setTimeout(() => {
+      formContainer.style.display = 'none';
+      document.getElementById('gform').reset();
+      document.getElementById('gform').style.display = 'block';
+      document.getElementById('success-message').style.display = 'none';
+    }, 2000); // 2 seconds delay to auto-close
   }
-
-  function closeForm() {
-    document.getElementById("report-box").style.display = "none";
-  }
-
-  function submitReportForm() {
-    // Get all values from form fields
-    const location = document.getElementById("location").value.trim();
-    const observations = document.getElementById("observations").value.trim();
-    const causeEffect = document.getElementById("causeEffect").value.trim();
-    const suggestions = document.getElementById("suggestions").value.trim();
-    const issueType = document.getElementById("issueType").value.trim();
-    const mediaFile = document.getElementById("mediaUpload").files[0];
-
-    // Validate required fields
-    if (!location || !observations || !causeEffect || !suggestions || !additionalComments) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
-    // Optional: convert file to base64 if you want to send it
-    // For now, just send text data
-
-    // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycbzrZCDWWsp9aaqEoT6WD0slBd0aqP2RtDFvUbz7zoCDjeIInOtUUm2_vnKlWD1eyjkE/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        place: location,
-        problem: observations,
-        more: causeEffect,
-        media: mediaFile ? mediaFile.name : "",
-        name: suggestions + " | " + additionalComments
-      })
-    })
-    .then(res => res.text())
-    .then(data => {
-      alert("Submitted successfully!");
-      // Reset form
-      document.getElementById("location").value = "";
-      document.getElementById("observations").value = "";
-      document.getElementById("causeEffect").value = "";
-      document.getElementById("suggestions").value = "";
-      document.getElementById("additionalComments").value = "";
-      document.getElementById("mediaUpload").value = "";
-
 
       // Try to add marker on map after submission
 L.Control.Geocoder.nominatim().geocode(location, function(results) {
