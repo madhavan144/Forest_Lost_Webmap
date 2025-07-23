@@ -12,8 +12,6 @@ const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabel
 
 
 
-
-
 // Forest loss image overlay
 const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
 L.imageOverlay('forest_loss.png', imageBounds, {
@@ -127,7 +125,7 @@ searchControl.on('markgeocode', function(e) {
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
-    if (!location || !observations || !causeEffect || !issueType || !suggestions || !additionalComments) {
+    if (!location || !observations || !causeEffect || !suggestions || !additionalComments) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -136,7 +134,7 @@ searchControl.on('markgeocode', function(e) {
     // For now, just send text data
 
     // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycbyTuzJRq24yqFFJZ4K04VkgKgnWgAwMsfy9Pkz5zZZ16JSWZI3F1cw-9ZY2nkcO4n4lQg/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbx5uesXt1xpRdxQjvSkOXh6sqeTTo8W_vQZ82d6zdmQM_95Ace0Kvs_uoBkOZPy7CbY/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
