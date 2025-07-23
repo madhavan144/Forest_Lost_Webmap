@@ -103,7 +103,9 @@ searchControl.on('markgeocode', function(e) {
 
    document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
   });
-// Submit to Google Sheets Web App
+
+
+
 let submitted = false;
 
   const toggleBtn = document.getElementById('report-toggle-button');
@@ -145,7 +147,7 @@ function fetchComments() {
         li.innerHTML = `<b style="color:#7be2b6;">${issue}</b> @ ${location}`;
         li.style.cursor = 'pointer';
         li.onclick = () => {
-          alert(`📍 ${location}\n🧨 ${issue}\n💬 ${cause}`);
+          alert(`⌨ ${location}\n📍${issue}\n⚠︎ ${cause}`);
         };
         list.appendChild(li);
       });
