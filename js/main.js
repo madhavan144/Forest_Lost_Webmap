@@ -3,12 +3,12 @@ const map = L.map('map', {
   attributionControl: false
 }).setView([7.8731, 80.7718], 7);
 
-// Dark basemap with NO labels
-const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+// Carto Dark basemap with labels
+const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd',
+  maxZoom: 19,
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
 }).addTo(map);
-
 
 
 
@@ -127,7 +127,7 @@ searchControl.on('markgeocode', function(e) {
     const mediaFile = document.getElementById("mediaUpload").files[0];
 
     // Validate required fields
-    if (!location || !observations || !causeEffect || !issueType || !suggestions || !additionalComments) {
+    if (!location || !observations || !causeEffect || !suggestions || !additionalComments) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -136,7 +136,7 @@ searchControl.on('markgeocode', function(e) {
     // For now, just send text data
 
     // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/library/d/1ru6V6gokQBz0Li06_qac0zeDBof8lgg7gli_F4PpPhwSvxkymFjy8_SX/1", {
+    fetch("https://script.google.com/macros/s/AKfycbx5uesXt1xpRdxQjvSkOXh6sqeTTo8W_vQZ82d6zdmQM_95Ace0Kvs_uoBkOZPy7CbY/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
