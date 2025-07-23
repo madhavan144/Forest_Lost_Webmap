@@ -3,15 +3,11 @@ const map = L.map('map', {
   attributionControl: false
 }).setView([7.8731, 80.7718], 7);
 
-// Dark basemap with NO labels
 const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd',
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
 }).addTo(map);
 
-
-
-// Forest loss image overlay
 const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
 L.imageOverlay('forest_loss.png', imageBounds, {
 }).addTo(map);
@@ -19,7 +15,7 @@ L.imageOverlay('forest_loss.png', imageBounds, {
 
 
 
-// Styling
+
 function getHighlightStyle() {
   return {
     color: '#66c2a5',
@@ -40,7 +36,6 @@ function getDefaultStyle() {
 let geojsonLayer;
 let selectedDistrict = null;
 
-// Load GeoJSON and add interactivity
 fetch('data/sri_lanka_districts.geojson')
   .then(response => response.json())
   .then(geoData => {
@@ -69,7 +64,6 @@ fetch('data/sri_lanka_districts.geojson')
     showChartImage(firstName);
   });
 
-// Function to show chart image by district name
 function showChartImage(districtName) {
   const chartImg = document.getElementById('chart-image');
   const imagePath = `charts/${districtName}.jpg`;
@@ -81,16 +75,11 @@ function showChartImage(districtName) {
             ${districtName}`;
 }
 
-
-
-
-// Search control (requires leaflet-control-geocoder plugin)
 const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
   placeholder: 'Search for a place...'
 }).addTo(map);
 
-// Update location input when search result selected
 let searchedMarker = null;
 searchControl.on('markgeocode', function(e) {
   const latlng = e.geocode.center;
@@ -103,8 +92,6 @@ searchControl.on('markgeocode', function(e) {
 
    document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
   });
-
-
 
 let submitted = false;
 
@@ -124,7 +111,7 @@ let submitted = false;
       document.getElementById('gform').reset();
       document.getElementById('gform').style.display = 'block';
       document.getElementById('success-message').style.display = 'none';
-    }, 2000); // 2 seconds delay to auto-close
+    }, 2000); 
   }
 
     
@@ -147,14 +134,13 @@ function fetchComments() {
         li.innerHTML = `<b style="color:#7be2b6;">${issue}</b> @ ${location}`;
         li.style.cursor = 'pointer';
         li.onclick = () => {
-          alert(`⌨ ${location}\n📍${issue}\n⚠︎ ${cause}`);
+          alert(`⌨ ${location}\n📍${issue}\n⚠⚠ ${cause}`);
         };
         list.appendChild(li);
       });
     });
 }
 
-// Auto refresh every 20 seconds
 setInterval(fetchComments, 20000);
 fetchComments();
 
