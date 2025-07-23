@@ -207,20 +207,17 @@
       </select><br /><br />
 
 
-        <label> Observations:</label><br>
-        <input id="details" rows="3" style="width: 100%;"><br><br>
+  <label>Cause & Effect (Community Insight):</label><br>
+  <textarea id="causeEffect" rows="3" style="width: 100%;"></textarea><br><br>
 
-        <label>Cause & Effect (Community Insight):</label><br>
-        <textarea id="details" rows="3" style="width: 100%;"></textarea><br><br>
+  <label>Upload Media:</label><br>
+  <input type="file" id="mediaUpload"><br><br> <!-- Note: File uploads can't go to Google Form -->
 
-        <label>Upload Media:</label><br>
-        <input type="file" id="mediaUpload"><br><br>
+  <label>Suggestions / Action:</label><br>
+  <input type="text" id="suggestion" style="width: 100%;"><br><br>
 
-        <label>Suggestions / Action:</label><br>
-        <input type="text" id="name" style="width: 100%;"><br><br>
-
-        <label>Additional Comments:</label><br>
-        <input type="text" id="name" style="width: 100%;"><br><br>
+  <label>Additional Comments:</label><br>
+  <input type="text" id="additional" style="width: 100%;"><br><br>
        </div>
 
         <button onclick="submitReportForm()" style="padding: 8px 12px; background-color: #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
@@ -232,6 +229,16 @@
 
 
  </div> 
+  <form id="hiddenGoogleForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdc6T4gmsntB7ijvL3HtLtmL0y5fXKbxHh6yRRmrH42zZCpFg/formResponse" method="POST" target="hidden_iframe" style="display: none;">
+  <input name="entry.1533182356" id="gLocation">
+  <input name="entry.1104620582" id="gIssueType">
+  <input name="entry.554050494" id="gCauseEffect">
+  <input name="entry.191037290" id="gSuggestion">
+  <input name="entry.1635911870" id="gAdditional">
+</form>
+
+<!-- Hidden iframe to avoid redirect -->
+<iframe name="hidden_iframe" style="display:none;"></iframe>
 <script src="js/main.js"></script>
 
   
