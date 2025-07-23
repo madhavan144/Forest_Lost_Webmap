@@ -134,23 +134,6 @@ L.Control.Geocoder.nominatim().geocode(location, function(results) {
 });
 
 
-      // Hide the form after submission
-      closeForm();
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("There was an error submitting your report.");
-    });
-  }
- function submitReportForm() {
-    alert("Report submitted!");
-    closeForm();
-  }
-
-  function closeForm() {
-    document.getElementById('report-box').style.display = 'none';
-  }
-
 
 // Icon colors for different issue types
 const iconColors = {
