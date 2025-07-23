@@ -114,20 +114,25 @@ searchControl.on('markgeocode', function(e) {
     document.getElementById("report-box").style.display = "none";
   }
 
-  function submitReportForm() {
-    // Get all values from form fields
-    const location = document.getElementById("location").value.trim();
-    const observations = document.getElementById("observations").value.trim();
-    const causeEffect = document.getElementById("causeEffect").value.trim();
-    const suggestions = document.getElementById("suggestions").value.trim();
-    const issueType = document.getElementById("issueType").value.trim();
-    const mediaFile = document.getElementById("mediaUpload").files[0];
+    function submitReportForm() {
+    // Get user input values
+    document.getElementById("gLocation").value = document.getElementById("location").value;
+    document.getElementById("gIssueType").value = document.getElementById("issueType").value;
+    document.getElementById("gCauseEffect").value = document.getElementById("causeEffect").value;
+    document.getElementById("gSuggestion").value = document.getElementById("suggestion").value;
+    document.getElementById("gAdditional").value = document.getElementById("additional").value;
 
-    // Validate required fields
-    if (!location || !observations || !causeEffect || !suggestions || !additionalComments) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+    // Submit hidden form
+    document.getElementById("hiddenGoogleForm").submit();
+
+    // Show confirmation
+    alert("Your report has been submitted!");
+  }
+
+  function closeForm() {
+    alert("Form closed.");
+    // Optionally: clear fields or hide the form container
+  }
 
     // Optional: convert file to base64 if you want to send it
     // For now, just send text data
