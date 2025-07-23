@@ -114,38 +114,91 @@
       z-index: 1000;
     }
 
-    #report-toggle-button, #report-box {
-      position: absolute;
-      bottom: 20px;
-      left: 340px;
-      z-index: 1000;
-    }
-     #report-toggle-button button {
-      position: fixed; bottom: 80px; left: 20px; z-index: 1000;padding: 8px 12px; background-color: #66c2a5; color: white; border: none; border-radius: 6px; cursor: pointer;
-    }
-    #report-box {
-    position: fixed;
-    bottom: 80px;
-    right: 500px;
-    z-index: 1000;
-    display: none;
-    background:  #66c2a5;
-    padding: 12px;
-    border-radius: 10px;
-    width: 280px;
-    height: 400px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-    font-family: sans-serif;
-    opacity: 0.6;
+   #report-toggle-button {
+      position: fixed;
+      bottom: 40px;
+      right: 20px;
+      z-index: 9999;
+      background-color: #056e36;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
+    #report-toggle-button:hover {
+      background-color: #05623d;
+    }
 
-    input[type="text"], textarea {
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-    padding: 4px;
-  }
+    /* Floating Form */
+    #report-form-container {
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      width: 300px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 9998;
+      animation: slide-up 0.3s ease;
+    }
+
+    @keyframes slide-up {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    #report-form-container h4 {
+      margin-top: 0;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    #report-form-container label {
+      font-size: 13px;
+      margin-bottom: 3px;
+      display: block;
+    }
+
+    #report-form-container input,
+    #report-form-container textarea,
+    #report-form-container select {
+      width: 100%;
+      font-size: 13px;
+      padding: 7px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #report-form-container button {
+      background-color: #056930;
+      color: white;
+      border: none;
+      padding: 8px;
+      width: 100%;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #report-form-container button:hover {
+      background-color: #046a49;
+    }
+
+    #success-message {
+      display: none;
+      color: green;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 10px;
+    }
 
 
   </style>
@@ -191,54 +244,39 @@
       </div>
 
       <!-- Report Box -->
-      <div id="report-box">
-        <h4 style="margin-top: 0;"> Report & Comment </h4>
-       <div style="max-height: 340px; overflow-y: auto;">
-        <label>Location:</label><br>
-        <input type="text" id="location" style="width: 100%;"><br><br>
+      <div id="report-form-container">
+  <h4>Report an Issue</h4>
+  <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLScmXSGhM1dPuGSt6omWF5PaoB8oYD68K2gug6VImVt0PgaxAg/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+    
+    <label>Location</label>
+    <input name="entry.1411538969" type="text" placeholder="Location" required>
 
-      <label>Issue Type:</label><br />
-        <select id="issueType" style="width: 100%;">
-        <option value="Tree Cutting">Tree Cutting</option>
-        <option value="Illegal Burning">Illegal Burning</option>
-        <option value="Land Clearing">Land Clearing</option>
-        <option value="Wildlife Displaced">Wildlife Displaced</option>
-        <option value="Other">Other</option>
-      </select><br /><br />
+    <label>Issue Type</label>
+    <select name="entry.792124572" required>
+      <option value="" disabled selected>Select issue</option>
+      <option value="Tree Cutting">Tree Cutting</option>
+      <option value="Illegal Burning">Illegal Burning</option>
+      <option value="Land Clearing">Land Clearing</option>
+      <option value="Wildlife Displaced">Wildlife Displaced</option>
+      <option value="Other">Other</option>
+    </select>
 
+    <label>Cause & Effect</label>
+    <textarea name="entry.2108901152" rows="2" placeholder="Explain..." required></textarea>
 
-  <label>Cause & Effect (Community Insight):</label><br>
-  <textarea id="causeEffect" rows="3" style="width: 100%;"></textarea><br><br>
+    <label>Suggestions</label>
+    <textarea name="entry.1835547772" rows="1" placeholder="Suggestions"></textarea>
 
-  <label>Upload Media:</label><br>
-  <input type="file" id="mediaUpload"><br><br> <!-- Note: File uploads can't go to Google Form -->
+    <label>Comments</label>
+    <textarea name="entry.315045802" rows="1" placeholder="Additional Comments"></textarea>
 
-  <label>Suggestions / Action:</label><br>
-  <input type="text" id="suggestion" style="width: 100%;"><br><br>
+    <button type="submit">Submit</button>
+  </form>
+  <div id="success-message">Thanks! Submitted ✅</div>
+</div>
 
-  <label>Additional Comments:</label><br>
-  <input type="text" id="additional" style="width: 100%;"><br><br>
-       </div>
-
-        <button onclick="submitReportForm()" style="padding: 8px 12px; background-color: #66c2a5; color: white; border: none; border-radius: 6px;">Submit</button>
-        <button onclick="closeForm()" style="padding: 8px 12px; background-color:  #66c2a5; color: white; border: none; border-radius: 6px;">Close</button>
-  
-    </div>
-  </div>
-
-
-
- </div> 
-  <form id="hiddenGoogleForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdc6T4gmsntB7ijvL3HtLtmL0y5fXKbxHh6yRRmrH42zZCpFg/formResponse" method="POST" target="hidden_iframe" style="display: none;">
-  <input name="entry.1533182356" id="gLocation">
-  <input name="entry.1104620582" id="gIssueType">
-  <input name="entry.554050494" id="gCauseEffect">
-  <input name="entry.191037290" id="gSuggestion">
-  <input name="entry.1635911870" id="gAdditional">
-</form>
-
-<!-- Hidden iframe to avoid redirect -->
-<iframe name="hidden_iframe" style="display:none;"></iframe>
+<!-- Hidden iframe -->
+<iframe name="hidden_iframe" style="display:none;" onload="if(submitted){ handleSuccess(); }"></iframe>
 <script src="js/main.js"></script>
 
   
