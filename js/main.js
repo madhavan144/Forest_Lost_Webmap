@@ -125,39 +125,34 @@ let submitted = false;
     }, 2000); // 2 seconds delay to auto-close
   }
 
-      // Try to add marker on map after submission
-L.Control.Geocoder.nominatim().geocode(location, function(results) {
-  if (results.length > 0) {
-    const latlng = results[0].center;
-    addReportMarker(latlng, issueType, observations);
-  }
-});
+    
+const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSTBJJ5gIduUwbOOiApi19s8DTg3BA6hxuqbbxCLGOTyzp0l8YU9iIClRU5cXtv_o2V2eZLx1uEdvNf/pub?output=csv';
 
+function fetchComments() {
+  fetch(sheetUrl)
+    .then(res => res.text())
+    .then(csvText => {
+      const rows = csvText.split('\n').slice(1);
+      const list = document.getElementById('comments-list');
+      list.innerHTML = '';
+      rows.slice(-5).reverse().forEach(row => {
+        const cols = row.split(',');
+        const location = cols[0]?.trim();
+        const issue = cols[1]?.trim();
+        const cause = cols[2]?.trim();
 
-
-// Icon colors for different issue types
-const iconColors = {
-  "Tree Cutting": "red",
-  "Illegal Burning": "orange",
-  "Land Clearing": "green",
-  "Wildlife Displaced": "purple",
-  "Other": "gray"
-};
-
-function getMarkerOptions(issueType) {
-  return {
-    radius: 8,
-    fillColor: iconColors[issueType] || "blue",
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
-  };
+        const li = document.createElement('li');
+        li.innerHTML = `<b style="color:#7be2b6;">${issue}</b> @ ${location}`;
+        li.style.cursor = 'pointer';
+        li.onclick = () => {
+          alert(`📍 ${location}\n🧨 ${issue}\n💬 ${cause}`);
+        };
+        list.appendChild(li);
+      });
+    });
 }
 
-// Show marker on map
-function addReportMarker(latlng, issueType, description) {
-  L.circleMarker(latlng, getMarkerOptions(issueType))
-    .addTo(map)
-    .bindPopup(`<b>${issueType}</b><br>${description}`);
-}
+// Auto refresh every 20 seconds
+setInterval(fetchComments, 20000);
+fetchComments();
+
