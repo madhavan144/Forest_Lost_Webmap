@@ -114,31 +114,26 @@ searchControl.on('markgeocode', function(e) {
     document.getElementById("report-box").style.display = "none";
   }
 
-    function submitReportForm() {
-    // Get user input values
-    document.getElementById("gLocation").value = document.getElementById("location").value;
-    document.getElementById("gIssueType").value = document.getElementById("issueType").value;
-    document.getElementById("gCauseEffect").value = document.getElementById("causeEffect").value;
-    document.getElementById("gSuggestion").value = document.getElementById("suggestion").value;
-    document.getElementById("gAdditional").value = document.getElementById("additional").value;
+  function submitReportForm() {
+    // Get all values from form fields
+    const location = document.getElementById("location").value.trim();
+    const observations = document.getElementById("observations").value.trim();
+    const causeEffect = document.getElementById("causeEffect").value.trim();
+    const suggestions = document.getElementById("suggestions").value.trim();
+    const issueType = document.getElementById("issueType").value.trim();
+    const mediaFile = document.getElementById("mediaUpload").files[0];
 
-    // Submit hidden form
-    document.getElementById("hiddenGoogleForm").submit();
-
-    // Show confirmation
-    alert("Your report has been submitted!");
-  }
-
-  function closeForm() {
-    alert("Form closed.");
-    // Optionally: clear fields or hide the form container
-  }
+    // Validate required fields
+    if (!location || !observations || !causeEffect || !suggestions || !additionalComments) {
+      alert("Please fill in all required fields.");
+      return;
+    }
 
     // Optional: convert file to base64 if you want to send it
     // For now, just send text data
 
     // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycbyr_HCRu1951eSuUc1EeDgKH6kKqSbo_mEvLagm-Eb1zNeVdaFf3fff5ZHyjtbtvztK/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbzrZCDWWsp9aaqEoT6WD0slBd0aqP2RtDFvUbz7zoCDjeIInOtUUm2_vnKlWD1eyjkE/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
