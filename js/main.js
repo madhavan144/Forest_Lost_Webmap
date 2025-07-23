@@ -9,10 +9,11 @@ const darkNoLabel = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabel
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
 }).addTo(map);
 
+
+
 // Forest loss image overlay
 const imageBounds = [[5.9194485647, 79.5211147385], [9.8352048882, 81.8791923593]];
 L.imageOverlay('forest_loss.png', imageBounds, {
-  opacity: 0.8
 }).addTo(map);
 
 
@@ -22,7 +23,7 @@ L.imageOverlay('forest_loss.png', imageBounds, {
 function getHighlightStyle() {
   return {
     color: '#66c2a5',
-    weight: 1.5,
+    weight: 1,
     fillOpacity: 0.3,
     fillColor: '#66c2a5'
   };
@@ -132,7 +133,7 @@ searchControl.on('markgeocode', function(e) {
     // For now, just send text data
 
     // Submit to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycbzFHeO0-Z9lqg0pn9e4LpfFbmt79Njlj2sq_184a8JeFWXJ0-Bnt0fGG_3NTm9E9ieK/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbwU2n0irtDL7Q3zB_Q_eaxmvGpObmGFZHo1q8I1qzDYZy7X1tdx9FLe-LgmP1CPwHKHcA/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
