@@ -93,16 +93,6 @@
       z-index: 1;
     }
     
-
-    .chart-box1 {
-      background: white;
-      color: black;
-      margin-top: 100px;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
     
     .legend {
       position: absolute;
@@ -203,6 +193,14 @@
       text-align: center;
       margin-top: 10px;
     }
+    #chart-box1 {
+      background: white;
+      color: black;
+      margin-top: 100px;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
  
   </style>
 </head>
@@ -239,21 +237,9 @@
     <span>17</span>
     <span>23</span>
   </div>
-
-
-        <div id="chart-box1">
-          <div class="chart-box1" id="live-issue-box">
-  <h2 style="font-size: 16px; margin-bottom: 10px;">Live Issue Chart</h2>
-  <canvas id="live-issue-chart" width="250" height="250"></canvas>
-  <p id="chart-status" style="color: lightgray; font-size: 12px;"></p>
-</div>
-
-</div>
       
         <button id="report-toggle-button" onclick="toggleReportBox()">Click here to Comment...!</button>
       
-
-    
       <div id="report-form-container">
   <h4>Report an Issue</h4>
   <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLScmXSGhM1dPuGSt6omWF5PaoB8oYD68K2gug6VImVt0PgaxAg/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
@@ -293,7 +279,14 @@
   <ul id="comments-list" style="list-style: none; padding: 0; font-size: 12px; color: white;"></ul>
 </div>
 
+     <div id="chart-box1">
+          <div class="chart-box1" id="live-issue-box">
+  <h2 style="font-size: 16px; margin-bottom: 10px;">Live Issue Chart</h2>
+  <canvas id="live-issue-chart" width="250" height="250"></canvas>
+  <p id="chart-status" style="color: lightgray; font-size: 12px;"></p>
+</div>
 
+</div>
       
 <script src="js/main.js"></script>
 
