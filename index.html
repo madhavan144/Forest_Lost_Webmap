@@ -282,6 +282,26 @@
 </div>
 
 
+<div id="info-card" style="
+  display: none;
+  position: fixed;
+  bottom: 75px;
+  right: 40px;
+  width: 160px;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 15px;
+  z-index: 999;
+  transition: all 0.3s ease;
+">
+  <div style="text-align: right;">
+    <button onclick="document.getElementById('info-card').style.display='none'" style="border: none; background: none; font-size: 16px;">❌</button>
+  </div>
+  <div id="info-card-content"></div>
+</div>
+
       
 <script src="js/main.js"></script>
 
