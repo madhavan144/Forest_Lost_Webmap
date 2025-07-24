@@ -58,6 +58,10 @@ fetch('data/sri_lanka_districts.geojson')
       }
     }).addTo(map);
 
+    // Auto-select first district
+    const first = geoData.features[0];
+    const firstName = first.properties.shapeName;
+    showChartImage(firstName);
   });
 
 function showChartImage(districtName) {
@@ -70,33 +74,26 @@ function showChartImage(districtName) {
   document.querySelector('#chart-box h2').innerText =      `Forest_Loss -
             ${districtName}`;
 }
-//location marker
+
 const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
   placeholder: 'Search for a place...'
 }).addTo(map);
 
 let searchedMarker = null;
-
 searchControl.on('markgeocode', function(e) {
   const latlng = e.geocode.center;
   const name = e.geocode.name;
 
-  if (searchedMarker) {
-    map.removeLayer(searchedMarker);
-  }
-
+  if (searchedMarker) {map.removeLayer(searchedMarker);
+                      }
   searchedMarker = L.marker(latlng).addTo(map)
     .bindPopup(name).openPopup();
 
-  // Fill the Google Form input field
-  const locationField = document.querySelector('input[name="entry.1411538969"]');
-  if (locationField) {
-    locationField.value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
-  }
-});
+   document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
+  });
 
-
+let submitted = false;
 
   const toggleBtn = document.getElementById('report-toggle-button');
   const formContainer = document.getElementById('report-form-container');
@@ -146,5 +143,3 @@ function fetchComments() {
 
 setInterval(fetchComments, 20000);
 fetchComments();
-
-
