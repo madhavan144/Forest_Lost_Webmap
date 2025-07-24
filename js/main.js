@@ -75,25 +75,7 @@ function showChartImage(districtName) {
             ${districtName}`;
 }
 
-const searchControl = L.Control.geocoder({
-  defaultMarkGeocode: true,
-  placeholder: 'Search for a place...'
-}).addTo(map);
 
-let searchedMarker = null;
-searchControl.on('markgeocode', function(e) {
-  const latlng = e.geocode.center;
-  const name = e.geocode.name;
-
-  if (searchedMarker) {map.removeLayer(searchedMarker);
-                      }
-  searchedMarker = L.marker(latlng).addTo(map)
-    .bindPopup(name).openPopup();
-
-   document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
-  });
-
-let submitted = false;
 
   const toggleBtn = document.getElementById('report-toggle-button');
   const formContainer = document.getElementById('report-form-container');
@@ -143,4 +125,18 @@ function fetchComments() {
 
 setInterval(fetchComments, 20000);
 fetchComments();
+
+
+li.onclick = () => {
+  const chartPath = `charts/${location}.jpg`; // Customize if needed
+  const issueIcon = getIssueIcon(issue);
+
+  document.getElementById('info-card-content').innerHTML = `
+    <h3 style="margin: 0;">${issueIcon} ${issue}</h3>
+    <p style="margin: 5px 0;"><b>Location:</b> ${location}</p>
+    <p style="font-size: 13px;">${cause}</p>
+    <img src="${chartPath}" alt="Chart" style="width: 100%; margin-top: 10px; border-radius: 6px;" onerror="this.style.display='none'">
+  `;
+  document.getElementById('info-card').style.display = 'block';
+};
 
