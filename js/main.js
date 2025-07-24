@@ -29,36 +29,7 @@ async function loadIssueTypeChart() {
     }
   });
 
-  const labels = Object.keys(counts);
-  const values = Object.values(counts);
 
-  const ctx = document.getElementById("issueChart").getContext("2d");
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: values,
-        backgroundColor: [
-          '#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854',
-          '#ffd92f', '#e5c494', '#b3b3b3'
-        ]
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom' },
-        title: {
-          display: true,
-          text: 'Community Reported Issues'
-        }
-      }
-    }
-  });
-}
-
-loadIssueTypeChart();
 
 
 
@@ -195,5 +166,34 @@ function fetchComments() {
 setInterval(fetchComments, 20000);
 fetchComments();
 
+  const labels = Object.keys(counts);
+  const values = Object.values(counts);
 
+  const ctx = document.getElementById("issueChart").getContext("2d");
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: [
+          '#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854',
+          '#ffd92f', '#e5c494', '#b3b3b3'
+        ]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: {
+          display: true,
+          text: 'Community Reported Issues'
+        }
+      }
+    }
+  });
+}
+
+loadIssueTypeChart();
 
