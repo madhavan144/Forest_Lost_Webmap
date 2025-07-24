@@ -58,10 +58,7 @@ fetch('data/sri_lanka_districts.geojson')
       }
     }).addTo(map);
 
-    // Auto-select first district
-    const first = geoData.features[0];
-    const firstName = first.properties.shapeName;
-    showChartImage(firstName);
+    
   });
 
 function showChartImage(districtName) {
@@ -81,19 +78,24 @@ const searchControl = L.Control.geocoder({
 }).addTo(map);
 
 let searchedMarker = null;
+
 searchControl.on('markgeocode', function(e) {
   const latlng = e.geocode.center;
   const name = e.geocode.name;
 
-  if (searchedMarker) {map.removeLayer(searchedMarker);
-                      }
+  if (searchedMarker) {
+    map.removeLayer(searchedMarker);
+  }
+
   searchedMarker = L.marker(latlng).addTo(map)
     .bindPopup(name).openPopup();
 
-   document.getElementById('location').value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
-  });
+  const locationField = document.querySelector('input[name="entry.1411538969"]');
+  if (locationField) {
+    locationField.value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
+  }
+});
 
-let submitted = false;
 
   const toggleBtn = document.getElementById('report-toggle-button');
   const formContainer = document.getElementById('report-form-container');
