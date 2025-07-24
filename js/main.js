@@ -139,4 +139,11 @@ li.onclick = () => {
   `;
   document.getElementById('info-card').style.display = 'block';
 };
+function getIssueIcon(issue) {
+  if (issue.includes("Tree")) return "🌳";
+  if (issue.includes("Burning")) return "🔥";
+  if (issue.includes("Clearing")) return "🪵";
+  if (issue.includes("Wildlife")) return "🦅";
+  return "📍";
+}
 
