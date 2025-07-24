@@ -12,6 +12,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <canvas id="issueChart" width="300" height="300"></canvas>
 
   <style>
     html, body {
@@ -246,7 +247,7 @@
   <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLScmXSGhM1dPuGSt6omWF5PaoB8oYD68K2gug6VImVt0PgaxAg/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
     
     <label>Location</label>
-    <input name="entry.1411538969" type="text" placeholder="Location" required>
+    <input name="entry.1411538969" type="text" placeholder="Serach in the map" required>
 
     <label>Issue Type</label>
     <select name="entry.792124572" required>
