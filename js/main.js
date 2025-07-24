@@ -51,15 +51,33 @@ fetch('data/sri_lanka_districts.geojson')
             selectedDistrict = e.target;
             selectedDistrict.setStyle(getHighlightStyle());
 
+            // Zoom to selected district at zoom level 19
+            map.fitBounds(selectedDistrict.getBounds(), { maxZoom: 19 });
+
             const districtName = feature.properties.shapeName;
             showChartImage(districtName);
           }
         });
       }
     }).addTo(map);
+  });
+
+function showChartImage(districtName) {
+  const chartImg = document.getElementById('chart-image');
+  const imagePath = `charts/${districtName}.jpg`;
+  chartImg.src = imagePath;
+  chartImg.alt = `Forest Loss Chart for ${districtName}`;
+  chartImg.style.display = 'block';
+
+  document.querySelector('#chart-box h2').innerText = `Forest_Loss - 
+    ${districtName}`;
+}
+});
+}
+}).addTo(map);
 
     
-  });
+});
 
 function showChartImage(districtName) {
   const chartImg = document.getElementById('chart-image');
