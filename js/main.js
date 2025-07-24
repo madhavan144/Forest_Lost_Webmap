@@ -86,15 +86,16 @@ searchControl.on('markgeocode', function(e) {
     map.removeLayer(searchedMarker);
   }
 
- 
   searchedMarker = L.marker(latlng).addTo(map)
     .bindPopup(name).openPopup();
-  
-  const locationField = document.getElementById('location');
+
+  // Fill the Google Form input field
+  const locationField = document.querySelector('input[name="entry.1411538969"]');
   if (locationField) {
     locationField.value = `${name} (${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)})`;
   }
 });
+
 
 
   const toggleBtn = document.getElementById('report-toggle-button');
