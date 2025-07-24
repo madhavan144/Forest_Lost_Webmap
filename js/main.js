@@ -148,23 +148,52 @@ setInterval(fetchComments, 20000);
 fetchComments();
 
 
-li.onclick = () => {
-  const chartPath = `charts/${location}.jpg`; // Customize if needed
-  const issueIcon = getIssueIcon(issue);
 
-  document.getElementById('info-card-content').innerHTML = `
-    <h3 style="margin: 0;">${issueIcon} ${issue}</h3>
-    <p style="margin: 5px 0;"><b>Location:</b> ${location}</p>
-    <p style="font-size: 13px;">${cause}</p>
-    <img src="${chartPath}" alt="Chart" style="width: 100%; margin-top: 10px; border-radius: 6px;" onerror="this.style.display='none'">
-  `;
-  document.getElementById('info-card').style.display = 'block';
-};
-function getIssueIcon(issue) {
-  if (issue.includes("Tree")) return "🌳";
-  if (issue.includes("Burning")) return "🔥";
-  if (issue.includes("Clearing")) return "🪵";
-  if (issue.includes("Wildlife")) return "🦅";
-  return "📍";
+const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSTBJJ5gIduUwbOOiApi19s8DTg3BA6hxuqbbxCLGOTyzp0l8YU9iIClRU5cXtv_o2V2eZLx1uEdvNf/pub?output=csv";
+
+async function loadChartData() {
+  const res = await fetch(sheetUrl);
+  const csv = await res.text();
+  const rows = csv.split("\n").slice(1); // remove headers
+  const counts = {};
+
+  rows.forEach(row => {
+    const cols = row.split(",");
+    const issue = cols[1]?.trim(); // index depends on your form
+    if (issue) {
+      counts[issue] = (counts[issue] || 0) + 1;
+    }
+  });
+
+  const labels = Object.keys(counts);
+  const data = Object.values(counts);
+
+  const ctx = document.getElementById('issueChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Community Reported Issues',
+        data,
+        backgroundColor: [
+          '#ff6f61', '#ffcc00', '#66bb6a', '#42a5f5', '#ab47bc'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: {
+          display: true,
+          text: 'Recent Issues Reported by Community'
+        }
+      }
+    }
+  });
 }
+
+loadChartData();
 
