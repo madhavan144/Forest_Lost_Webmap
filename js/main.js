@@ -72,23 +72,8 @@ function showChartImage(districtName) {
   document.querySelector('#chart-box h2').innerText = `Forest_Loss - 
     ${districtName}`;
 }
-});
-}
-}).addTo(map);
 
-    
-});
 
-function showChartImage(districtName) {
-  const chartImg = document.getElementById('chart-image');
-  const imagePath = `charts/${districtName}.jpg`;
-  chartImg.src = imagePath;
-  chartImg.alt = `Forest Loss Chart for ${districtName}`;
-  chartImg.style.display = 'block';
-
-  document.querySelector('#chart-box h2').innerText =      `Forest_Loss -
-            ${districtName}`;
-}
 
 const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
@@ -163,3 +148,89 @@ function fetchComments() {
 
 setInterval(fetchComments, 20000);
 fetchComments();
+
+
+let issueChart;
+
+async function fetchAndRenderLiveIssueChart() {
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSTBJJ5gIduUwbOOiApi19s8DTg3BA6hxuqbbxCLGOTyzp0l8YU9iIClRU5cXtv_o2V2eZLx1uEdvNf/pub?output=csv';
+  const statusEl = document.getElementById('chart-status');
+
+  try {
+    const res = await fetch(csvUrl);
+    const text = await res.text();
+
+    const rows = text.trim().split('\n');
+    if (rows.length < 2) {
+      statusEl.innerText = "No data rows found.";
+      return;
+    }
+
+    const issueIndex = rows[0].split(',').findIndex(h => h.toLowerCase().includes("issue"));
+    if (issueIndex === -1) {
+      statusEl.innerText = "‘Issue Type’ column not found.";
+      return;
+    }
+
+    const counts = {};
+    rows.slice(1).forEach(row => {
+      const cols = row.split(',');
+      const type = cols[issueIndex]?.trim();
+      if (type) counts[type] = (counts[type] || 0) + 1;
+    });
+
+    const labels = Object.keys(counts);
+    const data = Object.values(counts);
+
+    if (labels.length === 0) {
+      statusEl.innerText = "No valid issue types found.";
+      return;
+    }
+
+    statusEl.innerText = `Loaded ${rows.length - 1} responses`;
+
+    renderLivePieChart(labels, data);
+  } catch (e) {
+    console.error("Chart loading error:", e);
+    statusEl.innerText = "Error loading chart data.";
+  }
+}
+
+function renderLivePieChart(labels, data) {
+  const ctx = document.getElementById('live-issue-chart').getContext('2d');
+
+  if (issueChart) {
+    issueChart.data.labels = labels;
+    issueChart.data.datasets[0].data = data;
+    issueChart.update();
+    return;
+  }
+
+  issueChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: ['#ff6f69', '#ffcc5c', '#88d8b0', '#6a9fb5', '#f67280']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: 'black'
+          }
+        }
+      }
+    }
+  });
+}
+
+// Start loading chart
+fetchAndRenderLiveIssueChart();
+
+// Refresh every 30 seconds
+setInterval(fetchAndRenderLiveIssueChart, 30000);
