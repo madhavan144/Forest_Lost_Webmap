@@ -68,8 +68,6 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-
-    
    .sidebar h3 {
       position: absolute;
       bottom: 0;
@@ -81,7 +79,11 @@
       color: white;
     }
     
-   
+    #chart-image {
+      max-width: 100%;
+      display: none;
+    }
+
     .map-container {
       flex: 1;
       position: relative;
@@ -93,6 +95,9 @@
       z-index: 1;
     }
     
+
+
+
     
     .legend {
       position: absolute;
@@ -194,7 +199,6 @@
       margin-top: 10px;
     }
  
- 
   </style>
 </head>
 <body>
@@ -208,13 +212,11 @@
   </h3>
       <p> "District-wise Vegetation Cover Loss"
 </p>
-
-          
+        <div id="chart-box">
   <h2>Select a District to View Forest Loss</h2>
   <img id="chart-image" src="" alt="District Chart" style="max-width:100%; display:none;" />
 </div>
     </div>
-  
 
     <div class="map-container">
       <div id="map"></div>
@@ -230,15 +232,21 @@
     <span>17</span>
     <span>23</span>
   </div>
+</div>
+
+
+
       
         <button id="report-toggle-button" onclick="toggleReportBox()">Click here to Comment...!</button>
       
+
+    
       <div id="report-form-container">
   <h4>Report an Issue</h4>
   <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLScmXSGhM1dPuGSt6omWF5PaoB8oYD68K2gug6VImVt0PgaxAg/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
     
     <label>Location</label>
-    <input name="entry.1411538969" type="text" placeholder="Location" required>
+    <input name="entry.1411538969" type="text" placeholder="search in the map" required>
 
     <label>Issue Type</label>
     <select name="entry.792124572" required>
@@ -272,25 +280,6 @@
   <ul id="comments-list" style="list-style: none; padding: 0; font-size: 12px; color: white;"></ul>
 </div>
 
-    <div class="chart-box1" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: white;
-  color: black;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 9999;
-  width: 280px;
-  font-family: sans-serif;
-">
-  <h2 style="font-size: 16px; margin-bottom: 10px; color: #00695c;">
-    🔍 Live Community Reports
-  </h2>
-  <canvas id="live-issue-chart" width="250" height="250"></canvas>
-  <p id="chart-status" style="color: gray; font-size: 12px; margin-top: 10px;"></p>
-</div>
 
       
 <script src="js/main.js"></script>
