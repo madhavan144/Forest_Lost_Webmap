@@ -122,6 +122,7 @@ function fetchComments() {
       const rows = csvText.split('\n').slice(1);
       const list = document.getElementById('comments-list');
       list.innerHTML = '';
+
       rows.slice(-5).reverse().forEach(row => {
         const cols = row.split(',');
         const location = cols[0]?.trim();
@@ -131,9 +132,12 @@ function fetchComments() {
         const li = document.createElement('li');
         li.innerHTML = `<b style="color:#7be2b6;">${issue}</b> @ ${location}`;
         li.style.cursor = 'pointer';
+
         li.onclick = () => {
-          alert(`⌨ ${location}\n📍${issue}\n⚠⚠ ${cause}`);
+          const message = `📍 ${issue} @ ${location}\n⚠ ${cause}`;
+          showNotification(message);
         };
+
         list.appendChild(li);
       });
     });
@@ -141,6 +145,21 @@ function fetchComments() {
 
 setInterval(fetchComments, 20000);
 fetchComments();
+
+function showNotification(message, duration = 4000) {
+  const notifBox = document.getElementById('notification-box');
+  notifBox.textContent = message;
+  notifBox.style.display = 'block';
+  notifBox.style.opacity = '1';
+
+  setTimeout(() => {
+    notifBox.style.opacity = '0';
+    setTimeout(() => {
+      notifBox.style.display = 'none';
+    }, 300); 
+  }, duration);
+}
+
 
 let issueChart;
 
