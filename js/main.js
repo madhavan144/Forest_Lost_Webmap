@@ -51,8 +51,8 @@ fetch('data/sri_lanka_districts.geojson')
             selectedDistrict = e.target;
             selectedDistrict.setStyle(getHighlightStyle());
 
-            // Zoom to selected district at zoom level 19
-            map.fitBounds(selectedDistrict.getBounds(), { maxZoom: 19 });
+            
+            map.fitBounds(selectedDistrict.getBounds(), { maxZoom: 18 });
 
             const districtName = feature.properties.shapeName;
             showChartImage(districtName);
