@@ -221,9 +221,19 @@ function renderLivePieChart(labels, data) {
   });
 }
 
-// Start loading chart
-fetchAndRenderLiveIssueChart();
 
-// Refresh every 30 seconds
+fetchAndRenderLiveIssueChart();
 setInterval(fetchAndRenderLiveIssueChart, 30000);
+
+const toggleRecentCommentsBtn = document.getElementById('toggle-recent-comments-btn');
+const recentCommentsBox = document.getElementById('recent-comments');
+
+toggleRecentCommentsBtn.addEventListener('click', () => {
+  if (recentCommentsBox.style.display === 'none' || recentCommentsBox.style.display === '') {
+    recentCommentsBox.style.display = 'block';
+  } else {
+    recentCommentsBox.style.display = 'none';
+  }
+});
+
 
